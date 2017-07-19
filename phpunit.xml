@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="Application Test Suite">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">app/</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="env" value="dev"/>
+        <env name="base_url" value="http://localhost"/>
+        <env name="client_id" value="10"/>
+        <env name="client_email" value="sdk@2fas.com"/>
+        <env name="client_password" value="sdk_password"/>
+        <env name="integration_id" value="1"/>
+        <env name="card_id" value="543aagga"/>
+        <env name="second_client_id" value="11"/>
+        <env name="second_client_email" value="sdk-second@2fas.com"/>
+        <env name="second_client_password" value="sdk_password"/>
+        <env name="second_integration_id" value="2"/>
+        <env name="oauth_wordpress_token" value="oauth_wordpress_token"/>
+        <env name="oauth_second_wordpress_token" value="oauth_second_wordpress_token"/>
+        <env name="oauth_setup_token" value="oauth_setup_token"/>
+        <env name="oauth_setup_revoked_token" value="oauth_setup_revoked_token"/>
+    </php>
+</phpunit>
