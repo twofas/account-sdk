@@ -1,12 +1,16 @@
 {
     "name": "twofas/account-sdk",
-    "description": "account-sdk",
+    "description": "SDK for 2fas.com Account API",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Two Factor Authentication Service Inc.",
-            "email": "admin@2fas.com"
+            "name": "Krystian Dąbek",
+            "email": "k.dabek@2fas.com"
+        },
+        {
+            "name": "Michał Wężowski",
+            "email": "m.wezowski@2fas.com"
         }
     ],
     "require": {
