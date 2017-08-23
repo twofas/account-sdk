@@ -327,4 +327,51 @@ class IntegrationsTest extends AccountBase
 
         $twoFAs->createIntegration('a');
     }
+
+    public function testDeleteIntegration()
+    {
+        $twoFAs     = $this->getTwoFAs();
+        $httpClient = $this->getHttpClient();
+        $twoFAs->setHttpClient($httpClient);
+
+        if ($this->isDevelopmentEnvironment()) {
+            $integration = new Integration();
+
+            $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(
+                '',
+                HttpCodes::NO_CONTENT
+            ));
+        } else {
+            $integration = $twoFAs->createIntegration('hello');
+        }
+
+        $response = $twoFAs->deleteIntegration($integration);
+
+        $this->assertInstanceOf('TwoFAS\Account\NoContent', $response);
+    }
+
+    public function testDeleteNotFoundIntegration()
+    {
+        $twoFAs     = $this->getTwoFAs();
+        $httpClient = $this->getHttpClient();
+        $twoFAs->setHttpClient($httpClient);
+
+        $integration = new Integration();
+        $integration->setId(999999999999);
+
+        if ($this->isDevelopmentEnvironment()) {
+            $response = array('error' => array(
+                'code' => 10404,
+                'msg'  => 'No data matching given criteria'
+            ));
+
+            $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(
+                json_encode($response),
+                HttpCodes::NOT_FOUND
+            ));
+        }
+
+        $this->setExpectedException('\TwoFAS\Account\Exception\NotFoundException');
+        $twoFAs->deleteIntegration($integration);
+    }
 }

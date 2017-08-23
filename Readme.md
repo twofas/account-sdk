@@ -204,6 +204,39 @@ Exception 'TwoFAS\Account\Exception\ValidationException'
 with message 'Validation exception'
 ```
 
+## deleteIntegration
+
+Used for deleting integration.
+
+### Parameters
+
+Type | Name | Description
+--- | --- | ---
+Integration | $integration | Integration object
+
+### Example
+
+```php
+$response = $twoFAs->deleteIntegration($integration);
+```
+
+### Response
+
+#### Successful
+
+Returns [\TwoFAS\Account\NoContent](#noContent) object.
+
+#### Unsuccessful
+
+Method can throw exceptions:
+
+* `Exception` in case of unspecified type of exception
+
+```php
+Exception 'TwoFAS\Account\Exception\Exception'
+with message 'Unsupported response'
+```
+
 ## createKey
 
 Used for create new integration key in 2fas. 

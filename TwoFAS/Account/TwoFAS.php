@@ -21,7 +21,7 @@ class TwoFAS
     /**
      * @var string
      */
-    const VERSION = '2.0.10';
+    const VERSION = '2.0.11';
 
     /**
      * @var string
@@ -216,6 +216,29 @@ class TwoFAS
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
             return $integration;
+        }
+
+        throw $response->getError();
+    }
+
+    /**
+     * @param Integration $integration
+     *
+     * @return NoContent
+     *
+     * @throws NotFoundException
+     * @throws Exception
+     */
+    public function deleteIntegration(Integration $integration)
+    {
+        $response = $this->call(
+            $this->specificIntegrationTokenType,
+            'DELETE',
+            $this->createEndpoint('/integrations/' . $integration->getId())
+        );
+
+        if ($response->matchesHttpCode(HttpCodes::NO_CONTENT)) {
+            return new NoContent();
         }
 
         throw $response->getError();
