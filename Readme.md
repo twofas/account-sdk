@@ -1,4 +1,6 @@
-# Install
+# Getting started
+
+## Install
 
 ### via composer
 
@@ -6,9 +8,9 @@
 composer require twofas/account-sdk : "2.*"
 ```
 
-# Documentation
+## Documentation
 
-#### Creating SDK client
+### Creating SDK client
 
 ```php
 $twoFAs = new \TwoFAS\Account\TwoFAS($tokenStorage, $tokenType);
@@ -18,25 +20,25 @@ $twoFAs = new \TwoFAS\Account\TwoFAS($tokenStorage, $tokenType);
 
 `$tokenType` is a type of token which can be found in `\TwoFAS\Account\OAuth\TokenType` class.
 
-# Methods
+### Methods
 
-## getClient
+#### getClient
 
 Used for get client from 2fas.
 
-### Example
+##### Example
 
 ```php
 $client = $twoFAs->getClient();
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\Client](#client) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -47,11 +49,11 @@ Exception 'TwoFAS\Account\Exception\Exception'
 with message 'Unsupported response'
 ```
 
-## createClient
+#### createClient
 
 Used for create client in 2fas.
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
@@ -60,19 +62,19 @@ string | $password | Client's password
 string | $passwordConfirmation | Confirmation of the client's password
 string | $phone | Valid phone number
 
-### Example
+##### Example
 
 ```php
 $client = $twoFAs->createClient('client@example.com', 'pass123', 'pass123', '14157012311');
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\Client](#client) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -89,7 +91,7 @@ Exception 'TwoFAS\Account\Exception\ValidationException'
 with message 'Validation exception'
 ```
 
-## getIntegration
+#### getIntegration
 
 Used for get integration with specific ID from 2fas.
 
@@ -97,19 +99,19 @@ Type | Name | Description
 --- | --- | ---
 int | $integrationId | ID of the integration
 
-### Example
+##### Example
 
 ```php
 $integration = $twoFAs->getIntegration(123);
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\Integration](#integration) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -126,29 +128,29 @@ Exception 'TwoFAS\Account\Exception\NotFoundException'
 with message 'Resource not found'
 ```
 
-## createIntegration
+#### createIntegration
 
 Used for create integration in 2fas.
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
 string | $name | Integration name
 
-### Example
+##### Example
 
 ```php
 $integration = $twoFAs->createIntegration('my-website');
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\Integration](#integration) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -165,29 +167,29 @@ Exception 'TwoFAS\Account\Exception\ValidationException'
 with message 'Validation exception'
 ```
 
-## updateIntegration
+#### updateIntegration
 
 Used for update integration data.
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
 Integration | $integration | Integration object
 
-### Example
+##### Example
 
 ```php
 $integration = $twoFAs->updateIntegration($integration);
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\Integration](#integration) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -204,29 +206,29 @@ Exception 'TwoFAS\Account\Exception\ValidationException'
 with message 'Validation exception'
 ```
 
-## deleteIntegration
+#### deleteIntegration
 
 Used for deleting integration.
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
 Integration | $integration | Integration object
 
-### Example
+##### Example
 
 ```php
 $response = $twoFAs->deleteIntegration($integration);
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\NoContent](#noContent) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -237,30 +239,30 @@ Exception 'TwoFAS\Account\Exception\Exception'
 with message 'Unsupported response'
 ```
 
-## createKey
+#### createKey
 
 Used for create new integration key in 2fas. 
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
 int | $integrationId | ID of the integration
 string | $name | Key's name
 
-### Example
+##### Example
 
 ```php
 $key = $twoFAs->createKey($integration->getId(), 'Production key');
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\Key](#key) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -277,29 +279,29 @@ Exception 'TwoFAS\Account\Exception\ValidationException'
 with message 'Validation exception'
 ```
 
-## getPrimaryCard
+#### getPrimaryCard
 
 Used for get primary card for specific client
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
 Client | $client | Client object
 
-### Example
+##### Example
 
 ```php
 $card = $twoFAs->getPrimaryCard($client);
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\Card](#card) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -316,29 +318,29 @@ Exception 'TwoFAS\Account\Exception\NotFoundException'
 with message 'Resource not found'
 ```
 
-## resetPassword
+#### resetPassword
 
 Used for reset password in 2fas account - it sends email with link and instructions for password reset.
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
 string | $email | Client's e-mail
 
-### Example
+##### Example
 
 ```php
 $twoFAs->resetPassword($email);
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Returns [\TwoFAS\Account\NoContent](#noContent) object.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -359,30 +361,30 @@ You can get additional information (for eg. minutes to next possible password re
 ```php
 $exception->getMinutesToNextReset();
 ```
-## generateOAuthSetupToken
+#### generateOAuthSetupToken
 
 Used for generate OAuth Token with "Setup" scope. This kind of token is used for create Client and Integration.
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
 string | $email | Client's e-mail
 string | $password | Client's password
 
-### Example
+##### Example
 
 ```php
 $twoFAs->generateOAuthSetupToken($email, $password);
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Only store token in storage without any returned value.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -405,11 +407,11 @@ Exception 'TwoFAS\Account\Exception\ValidationException'
 with message 'Validation exception'
 ```
 
-## generateIntegrationSpecificToken
+#### generateIntegrationSpecificToken
 
 Used for generate OAuth Token with specific scope (which can be found in `\TwoFAS\Account\OAuth\TokenType`) for concrete integration.
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
@@ -417,19 +419,19 @@ string | $email    | Client's e-mail
 string | $password | Client's password
 int    | $integrationId | Integration's ID
 
-### Example
+##### Example
 
 ```php
 $twoFAs->generateIntegrationSpecificToken($email, $password, $integrationId);
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Only store token in storage without any returned value.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -452,23 +454,23 @@ Exception 'TwoFAS\Account\Exception\ValidationException'
 with message 'Validation exception'
 ```
 
-## getConfig
+#### getConfig
 
 Used for get public configuration options from 2FAS.
 
-### Example
+##### Example
 
 ```php
 $twoFAs->getConfig();
 ```
 
-### Response
+##### Response
 
-#### Successful
+###### Successful
 
 Return array that contains configuration options.
 
-#### Unsuccessful
+###### Unsuccessful
 
 Method can throw exceptions:
 
@@ -479,29 +481,29 @@ Exception 'TwoFAS\Account\Exception\Exception'
 with message 'Unsupported response'
 ```
 
-## setBaseUrl
+#### setBaseUrl
 
 Used to change the address of the server to which the SDK connects.
 
-### Parameters
+##### Parameters
 
 Type | Name | Description
 --- | --- | ---
 string | $url | Account's API URL
 
-### Example
+##### Example
 
 ```php
 $twoFAs = $twoFAs->setBaseUrl('http://account.api');
 ```
 
-### Response
+##### Response
 
 Returns `\TwoFAS\Account\TwoFAs` instance allowing method chaining.
 
-# Objects
+## Objects
 
-## Card
+### Card
 
 Card object is returned by:
 
@@ -533,7 +535,7 @@ $card
 $id = $card->getId();
 $lastFour = $card->getLastFour();
 ```
-## Client
+### Client
 
 Client object is returned by:
 
@@ -567,7 +569,7 @@ $client
 $id = $client->getId();
 $email = $client->getEmail();
 ```
-## Integration
+### Integration
 
 Integration object is returned by:
 
@@ -609,7 +611,7 @@ $integration
 $id = $integration->getId();
 $channels = $integration->getChannels();
 ```
-## Key
+### Key
 
 Key object is returned by:
 
@@ -630,9 +632,9 @@ $key = new Key('57ff5cde6....');
 $token = $key->getToken();
 ```
 
-# More about exceptions
+## More about exceptions
 
-## more ValidationException
+### ValidationException
 
 Validation exceptions may contain multiple keys and rules.
 For simplicity of integrating this exception has few methods:
