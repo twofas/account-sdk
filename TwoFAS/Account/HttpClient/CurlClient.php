@@ -9,6 +9,21 @@ use TwoFAS\Account\Response\ResponseGenerator;
 class CurlClient implements ClientInterface
 {
     /**
+     * @var resource
+     */
+    private $handle;
+
+    public function __construct()
+    {
+        $this->handle = curl_init();
+    }
+
+    public function __destruct()
+    {
+        curl_close($this->handle);
+    }
+
+    /**
      * @param string $method
      * @param string $endpoint
      * @param array  $data
@@ -22,15 +37,13 @@ class CurlClient implements ClientInterface
     {
         $jsonInput = json_encode($data);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->mapHeaders($headers));
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonInput);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        curl_setopt($this->handle, CURLOPT_URL, $endpoint);
+        curl_setopt($this->handle, CURLOPT_HTTPHEADER, $this->mapHeaders($headers));
+        curl_setopt($this->handle, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($this->handle, CURLOPT_POSTFIELDS, $jsonInput);
+        curl_setopt($this->handle, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($this->handle);
+        $httpCode = curl_getinfo($this->handle, CURLINFO_HTTP_CODE);
 
         return ResponseGenerator::createFrom($response, $httpCode);
     }
