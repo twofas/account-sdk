@@ -21,7 +21,7 @@ class TwoFAS
     /**
      * @var string
      */
-    const VERSION = '2.0.13';
+    const VERSION = '2.0.14';
 
     /**
      * @var string
@@ -36,7 +36,7 @@ class TwoFAS
     /**
      * @var string
      */
-    private $baseUrl = 'https://twofas-server.herokuapp.com';
+    private $baseUrl = 'https://account.2fas.com';
 
     /**
      * @var ClientInterface
