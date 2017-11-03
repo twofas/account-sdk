@@ -3,8 +3,9 @@
 namespace TwoFAS\Account\Exception;
 
 use TwoFAS\Account\ValidationRules;
+use TwoFAS\ValidationRules\ValidationExceptionInterface;
 
-class ValidationException extends Exception
+class ValidationException extends Exception implements ValidationExceptionInterface
 {
     /**
      * @var array

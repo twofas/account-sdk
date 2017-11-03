@@ -4,9 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "16afd2d64e9d1ac7c2b59366427a679b",
-    "content-hash": "9d47a6bb086278d15c9ddd24c19e1706",
-    "packages": [],
+    "hash": "d7d7da0a2ed0b3ccbabf5b64cfe5ae82",
+    "content-hash": "ecbb53fa5934d5e929f807d9ef4611b0",
+    "packages": [
+        {
+            "name": "twofas/validation-rules",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twofas/validation-rules.git",
+                "reference": "0b9ae7818d451c32d4380f739c1abed5975c71b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twofas/validation-rules/zipball/0b9ae7818d451c32d4380f739c1abed5975c71b3",
+                "reference": "0b9ae7818d451c32d4380f739c1abed5975c71b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TwoFAS\\ValidationRules\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Krystian Dąbek",
+                    "email": "k.dabek@2fas.com"
+                }
+            ],
+            "description": "Validation rules for SDK",
+            "time": "2017-10-03 10:47:45"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
@@ -973,7 +1013,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.0",
+        "php": ">=5.3.3",
         "ext-curl": "*"
     },
     "platform-dev": []
