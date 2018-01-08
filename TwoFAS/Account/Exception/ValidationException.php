@@ -2,8 +2,8 @@
 
 namespace TwoFAS\Account\Exception;
 
-use TwoFAS\Account\ValidationRules;
 use TwoFAS\ValidationRules\ValidationExceptionInterface;
+use TwoFAS\ValidationRules\ValidationRules;
 
 class ValidationException extends Exception implements ValidationExceptionInterface
 {

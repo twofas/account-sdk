@@ -183,6 +183,52 @@ class IntegrationsTest extends AccountBase
         $this->assertTrue($integration->getChannel('totp'));
     }
 
+    public function testUpdateEncryptionKeys()
+    {
+        $twoFAs     = $this->getTwoFAs();
+        $httpClient = $this->getHttpClient();
+        $twoFAs->setHttpClient($httpClient);
+
+        if ($this->isDevelopmentEnvironment()) {
+            $response = array(
+                'id'            => 1,
+                'login'         => 'login',
+                'name'          => 'new_name',
+                'channel_sms'   => false,
+                'channel_call'  => false,
+                'channel_email' => false,
+                'channel_totp'  => true,
+                'private_key'   => str_repeat('a', 700),
+                'public_key'    => str_repeat('b', 300)
+            );
+
+            $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::OK));
+        }
+
+        $integration = new Integration();
+        $integration
+            ->setId(getenv('integration_id'))
+            ->setLogin('login')
+            ->setName('name')
+            ->setChannels(array(
+                'sms'   => false,
+                'call'  => false,
+                'email' => true,
+                'totp'  => true
+            ));
+
+        $this->assertNull($integration->getPublicKey());
+        $this->assertNull($integration->getPrivateKey());
+
+        $integration = $twoFAs->resetIntegrationEncryptionKeys($integration);
+
+        $this->assertEquals(getenv('integration_id'), $integration->getId());
+        $this->assertTrue(is_string($integration->getPublicKey()));
+        $this->assertTrue(strlen($integration->getPublicKey()) > 200);
+        $this->assertTrue(is_string($integration->getPrivateKey()));
+        $this->assertTrue(strlen($integration->getPrivateKey()) > 400);
+    }
+
     public function testCannotEnableIntegrationChannel()
     {
         $tokenType = TokenType::wordpress();

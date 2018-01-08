@@ -21,7 +21,7 @@ class TwoFAS
     /**
      * @var string
      */
-    const VERSION = '2.0.16';
+    const VERSION = '2.0.17';
 
     /**
      * @var string
@@ -211,11 +211,36 @@ class TwoFAS
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'PUT',
-            $this->createEndpoint('/integrations/' . $integration->getId()), $integration->toArray()
+            $this->createEndpoint('/integrations/' . $integration->getId()),
+            $integration->toArray()
         );
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
             return $integration;
+        }
+
+        throw $response->getError();
+    }
+
+    /**
+     * @param Integration $integration
+     *
+     * @return Integration
+     *
+     * @throws Exception
+     * @throws ValidationException
+     */
+    public function resetIntegrationEncryptionKeys(Integration $integration)
+    {
+        $response = $this->call(
+            $this->specificIntegrationTokenType,
+            'PUT',
+            $this->createEndpoint('/integrations/' . $integration->getId() . '/reset-encryption-keys'),
+            $integration->toArray()
+        );
+
+        if ($response->matchesHttpCode(HttpCodes::OK)) {
+            return $this->hydrator->getIntegrationFromResponseData($response->getData());
         }
 
         throw $response->getError();
