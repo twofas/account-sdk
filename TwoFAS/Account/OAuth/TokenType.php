@@ -9,6 +9,7 @@ class TokenType
     const SETUP                  = 'setup';
     const WORDPRESS              = 'wordpress';
     const SYMFONY                = 'symfony';
+    const API                    = 'api';
     const PASSWORDLESS_WORDPRESS = 'passwordless-wordpress';
 
     /**
@@ -65,6 +66,14 @@ class TokenType
     }
 
     /**
+     * @return TokenType
+     */
+    public static function api()
+    {
+        return new self(self::API);
+    }
+
+    /**
      * @param string $type
      *
      * @return TokenType
@@ -89,6 +98,7 @@ class TokenType
             self::SETUP,
             self::WORDPRESS,
             self::SYMFONY,
+            self::API,
             self::PASSWORDLESS_WORDPRESS
         ), true);
     }
