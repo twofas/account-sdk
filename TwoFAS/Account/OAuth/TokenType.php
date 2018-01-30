@@ -4,6 +4,11 @@ namespace TwoFAS\Account\OAuth;
 
 use InvalidArgumentException;
 
+/**
+ * This class is a simple Value Object that stores token type.
+ *
+ * @package TwoFAS\Account\OAuth
+ */
 class TokenType
 {
     const SETUP                  = 'setup';

@@ -5,6 +5,12 @@ namespace TwoFAS\Account\Exception;
 use TwoFAS\ValidationRules\ValidationExceptionInterface;
 use TwoFAS\ValidationRules\ValidationRules;
 
+/**
+ * Validation Exceptions may contain multiple keys and rules.
+ * This exception will be thrown if data sent do API doesn't match the scheme.
+ *
+ * @package TwoFAS\Account\Exception
+ */
 class ValidationException extends Exception implements ValidationExceptionInterface
 {
     /**

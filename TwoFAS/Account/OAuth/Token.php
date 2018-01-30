@@ -4,6 +4,11 @@ namespace TwoFAS\Account\OAuth;
 
 use InvalidArgumentException;
 
+/**
+ * This is an Entity that stores authorization data.
+ *
+ * @package TwoFAS\Account\OAuth
+ */
 class Token
 {
     /**

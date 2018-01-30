@@ -16,12 +16,17 @@ use TwoFAS\Account\OAuth\TokenNotFoundException;
 use TwoFAS\Account\OAuth\TokenType;
 use TwoFAS\Account\Response\Response;
 
+/**
+ * This is the main SDK class that is used to interact with the API.
+ *
+ * @package TwoFAS\Account
+ */
 class TwoFAS
 {
     /**
      * @var string
      */
-    const VERSION = '2.0.18';
+    const VERSION = '2.0.19';
 
     /**
      * @var string
@@ -77,6 +82,8 @@ class TwoFAS
     }
 
     /**
+     * Set API url.
+     *
      * @param  string $url
      *
      * @return TwoFAS
@@ -88,6 +95,8 @@ class TwoFAS
     }
 
     /**
+     * Set custom http client.
+     *
      * @param ClientInterface $httpClient
      *
      * @return TwoFAS
@@ -99,6 +108,8 @@ class TwoFAS
     }
 
     /**
+     * Used for getting client from 2FAS.
+     *
      * @return Client
      *
      * @throws Exception
@@ -119,6 +130,8 @@ class TwoFAS
     }
 
     /**
+     * Used for creating client in 2FAS.
+     *
      * @param string $email
      * @param string $password
      * @param string $passwordConfirmation
@@ -150,6 +163,8 @@ class TwoFAS
     }
 
     /**
+     * Used for getting integration with specific id from 2FAS.
+     *
      * @param int $integrationId
      *
      * @return Integration
@@ -173,6 +188,8 @@ class TwoFAS
     }
 
     /**
+     * Used for creating integration in 2FAS.
+     *
      * @param string $name
      *
      * @return Integration
@@ -199,6 +216,8 @@ class TwoFAS
 
 
     /**
+     * Used for updating integration data.
+     *
      * @param Integration $integration
      *
      * @return Integration
@@ -223,6 +242,8 @@ class TwoFAS
     }
 
     /**
+     * Used for deleting integration.
+     *
      * @param Integration $integration
      *
      * @return Integration
@@ -270,6 +291,8 @@ class TwoFAS
     }
 
     /**
+     * Used for creating new integration key in 2FAS.
+     *
      * @param int    $integrationId
      * @param string $name
      *
@@ -298,6 +321,8 @@ class TwoFAS
     }
 
     /**
+     * Used for getting primary card for specific client.
+     *
      * @param Client $client
      *
      * @return Card
@@ -325,6 +350,8 @@ class TwoFAS
     }
 
     /**
+     * Used for resetting password in 2fas account - it sends email with link and instructions for password reset.
+     *
      * @param string $email
      *
      * @return NoContent
@@ -348,6 +375,9 @@ class TwoFAS
     }
 
     /**
+     * Used for generating OAuth Token with "Setup" scope.
+     * This kind of token is used for creating Client and Integration.
+     *
      * @param string $email
      * @param string $password
      *
@@ -385,6 +415,8 @@ class TwoFAS
     }
 
     /**
+     * Used for generating OAuth Token with specific scope for concrete integration.
+     *
      * @param string $email
      * @param string $password
      * @param int    $integrationId
@@ -424,6 +456,8 @@ class TwoFAS
     }
 
     /**
+     * Used for getting public configuration options from 2FAS.
+     *
      * @return array
      *
      * @throws Exception

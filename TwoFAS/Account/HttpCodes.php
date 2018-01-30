@@ -2,6 +2,11 @@
 
 namespace TwoFAS\Account;
 
+/**
+ * List of http status codes.
+ *
+ * @package TwoFAS\Account
+ */
 class HttpCodes
 {
     const OK           = 200;

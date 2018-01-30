@@ -10,6 +10,11 @@ use TwoFAS\Account\Exception\PasswordResetAttemptsRemainingIsReachedException;
 use TwoFAS\Account\Exception\ValidationException;
 use TwoFAS\Account\HttpCodes;
 
+/**
+ * This class stores data returned by the API.
+ *
+ * @package TwoFAS\Account\Response
+ */
 class Response
 {
     /**

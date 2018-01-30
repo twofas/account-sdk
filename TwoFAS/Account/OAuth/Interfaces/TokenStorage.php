@@ -5,6 +5,11 @@ namespace TwoFAS\Account\OAuth\Interfaces;
 use TwoFAS\Account\OAuth\Token;
 use TwoFAS\Account\OAuth\TokenNotFoundException;
 
+/**
+ * This interface should be implemented for storing and retrieving tokens used for authorization.
+ *
+ * @package TwoFAS\Account\OAuth\Interfaces
+ */
 interface TokenStorage
 {
     /**

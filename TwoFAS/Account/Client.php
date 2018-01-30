@@ -2,6 +2,11 @@
 
 namespace TwoFAS\Account;
 
+/**
+ * This is an Entity that stores information about client.
+ *
+ * @package TwoFAS\Account
+ */
 final class Client
 {
     /**

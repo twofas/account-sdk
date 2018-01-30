@@ -4,6 +4,11 @@ namespace TwoFAS\Account;
 
 use InvalidArgumentException;
 
+/**
+ * This is an Entity that stores information about integration.
+ *
+ * @package TwoFAS\Account
+ */
 final class Integration
 {
     /**

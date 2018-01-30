@@ -2,6 +2,12 @@
 
 namespace TwoFAS\Account\Exception;
 
+/**
+ * This exception will be thrown when password reset reaches attempts limit.
+ * You have three attempts per hour.
+ *
+ * @package TwoFAS\Account\Exception
+ */
 class PasswordResetAttemptsRemainingIsReachedException extends Exception
 {
     /**

@@ -1,649 +1,124 @@
-# Getting started
+# Getting started with 2FAS Account SDK
 
-## Install
+This SDK is used to create and manage an account in 2FAS from your PHP application.
+The latest version of the 2FAS SDK can be found on [Github](https://github.com/twofas/account-sdk). 
+The 2FAS SDK requires PHP version 5.3.3 or higher. 
 
-### via composer
+> **Note**: API reference for this SDK is available [here](https://docs.2fas.com/account)
 
-```bash
+Follow these steps to create an account in 2FAS:
+
+1. [Installation and creating account](#installation-and-creating-account)
+2. [Managing account](#managing-account)
+
+**Full documentation for our SDK can be found [here](https://docs.2fas.com/apigen/Account)**
+
+## Installation and creating account
+
+The SDK can only be installed using a composer. 
+You can add the PHP SDK to your [composer.json](https://getcomposer.org/doc/04-schema.md) 
+file with the [require](https://getcomposer.org/doc/03-cli.md#require) command:
+
+```php
 composer require twofas/account-sdk : "2.*"
 ```
 
-## Documentation
+If you are using a framework like Symfony or Laravel, the 2FAS SDK may be automatically loaded for you and ready to use in your application. 
+If you're using Composer in an environment that doesn't handle autoloading, 
+you can require the autoload file from the "vendor" directory created by Composer if you used the install command above.
 
 ### Creating SDK client
 
+Before you start using SDK, you have to write some code. 
+We use [OAuth](https://oauth.net/) for authentication, and you have to store tokens in your storage (eg. database).
+All you have to do is implement `TwoFAS\Account\OAuth\Interfaces\TokenStorage` and use `TwoFAS\Account\OAuth\TokenType::api()` token type:
+
 ```php
-$twoFAs = new \TwoFAS\Account\TwoFAS($tokenStorage, $tokenType);
+
+<?php
+// Required if your environment does not handle autoloading
+require __DIR__ . '/vendor/autoload.php';
+
+//class MyTokenStorage implements \TwoFAS\Account\OAuth\Interfaces\TokenStorage {...}
+$tokenStorage = new MyTokenStorage();
+$tokenType = TokenType::api();
+
+$twoFAS = new \TwoFAS\Account\TwoFAS($tokenStorage, $tokenType);
 ```
 
-`$tokenStorage` can be any storage (db, file etc.) which implements `\TwoFAS\Account\OAuth\Interfaces\TokenStorage` interface.
+### Creating Account
 
-`$tokenType` is a type of token which can be found in `\TwoFAS\Account\OAuth\TokenType` class.
-
-### Methods
-
-#### getClient
-
-Used for get client from 2fas.
-
-##### Example
+Instead of creating an account with our [dashboard](https://dashboard.2fas.com/#/register), you can use these few lines of code:
 
 ```php
-$client = $twoFAs->getClient();
+
+<?php
+// SDK client has been created
+
+$email = 'foo@example.com';
+$password = $passwordConfirmation = 'You secret password';
+$source = 'api';
+
+$client = $twofas->createClient($email, $password, $passwordConfirmation, $source);
 ```
 
-##### Response
+### Creating OAuth Tokens
 
-###### Successful
-
-Returns [\TwoFAS\Account\Client](#client) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
+Now that you have created an account, you need to create 2 types of tokens to authenticate in the API: *setup* and *api*.
+The first one is used only to create integration while the second is used in other cases. 
+You do not have to worry about which one to use, because TokenStorage will do it for you.
 
 ```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
+
+<?php
+// SDK client and Account has been created
+
+$email = 'foo@example.com';
+$password = 'Your secret password';
+$name = 'My Site';
+
+$twoFAS->generateOAuthSetupToken($email, $password);
+$integration = $twoFAS->createIntegration($name);
+$twoFAS->generateIntegrationSpecificToken($email, $password, $integration->getId());
 ```
 
-#### createClient
+## Managing account
 
-Used for create client in 2fas.
+### Managing integration
 
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-string | $email | Valid e-mail address
-string | $password | Client's password
-string | $passwordConfirmation | Confirmation of the client's password
-string | $phone | Valid phone number
-
-##### Example
+After creating integration, you can update its attributes (e.g. name) 
+or decide which channels should be enabled for this integration.
 
 ```php
-$client = $twoFAs->createClient('client@example.com', 'pass123', 'pass123', '14157012311');
-```
 
-##### Response
+<?php
+// SDK client and Account has been created
 
-###### Successful
-
-Returns [\TwoFAS\Account\Client](#client) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `ValidationException` if you send invalid data in request [more](#more-validationexception)
-
-```php
-Exception 'TwoFAS\Account\Exception\ValidationException'
-with message 'Validation exception'
-```
-
-#### getIntegration
-
-Used for get integration with specific ID from 2fas.
-
-Type | Name | Description
---- | --- | ---
-int | $integrationId | ID of the integration
-
-##### Example
-
-```php
-$integration = $twoFAs->getIntegration(123);
-```
-
-##### Response
-
-###### Successful
-
-Returns [\TwoFAS\Account\Integration](#integration) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `NotFoundException` in case of resource is not found on the server
-
-```php
-Exception 'TwoFAS\Account\Exception\NotFoundException'
-with message 'Resource not found'
-```
-
-#### createIntegration
-
-Used for create integration in 2fas.
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-string | $name | Integration name
-
-##### Example
-
-```php
-$integration = $twoFAs->createIntegration('my-website');
-```
-
-##### Response
-
-###### Successful
-
-Returns [\TwoFAS\Account\Integration](#integration) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `ValidationException` if you send invalid data in request [more](#more-validationexception)
-
-```php
-Exception 'TwoFAS\Account\Exception\ValidationException'
-with message 'Validation exception'
-```
-
-#### updateIntegration
-
-Used for update integration data.
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-Integration | $integration | Integration object
-
-##### Example
-
-```php
-$integration = $twoFAs->updateIntegration($integration);
-```
-
-##### Response
-
-###### Successful
-
-Returns [\TwoFAS\Account\Integration](#integration) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `ValidationException` if you send invalid data in request [more](#more-validationexception)
-
-```php
-Exception 'TwoFAS\Account\Exception\ValidationException'
-with message 'Validation exception'
-```
-
-#### deleteIntegration
-
-Used for deleting integration.
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-Integration | $integration | Integration object
-
-##### Example
-
-```php
-$response = $twoFAs->deleteIntegration($integration);
-```
-
-##### Response
-
-###### Successful
-
-Returns [\TwoFAS\Account\NoContent](#noContent) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-
-#### createKey
-
-Used for create new integration key in 2fas. 
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-int | $integrationId | ID of the integration
-string | $name | Key's name
-
-##### Example
-
-```php
-$key = $twoFAs->createKey($integration->getId(), 'Production key');
-```
-
-##### Response
-
-###### Successful
-
-Returns [\TwoFAS\Account\Key](#key) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `ValidationException` if you send invalid data in request [more](#more-validationexception)
-
-```php
-Exception 'TwoFAS\Account\Exception\ValidationException'
-with message 'Validation exception'
-```
-
-#### getPrimaryCard
-
-Used for get primary card for specific client
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-Client | $client | Client object
-
-##### Example
-
-```php
-$card = $twoFAs->getPrimaryCard($client);
-```
-
-##### Response
-
-###### Successful
-
-Returns [\TwoFAS\Account\Card](#card) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `NotFoundException` in case of resource is not found on the server
-
-```php
-Exception 'TwoFAS\Account\Exception\NotFoundException'
-with message 'Resource not found'
-```
-
-#### resetPassword
-
-Used for reset password in 2fas account - it sends email with link and instructions for password reset.
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-string | $email | Client's e-mail
-
-##### Example
-
-```php
-$twoFAs->resetPassword($email);
-```
-
-##### Response
-
-###### Successful
-
-Returns [\TwoFAS\Account\NoContent](#noContent) object.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `PasswordResetAttemptsRemainingIsReachedException` in case of password reset attempts remaining is reached
-
-```php
-Exception 'TwoFAS\Account\Exception\PasswordResetAttemptsRemainingIsReachedException'
-with message 'Limit of password reset attempts is already reached'
-```
-
-You can get additional information (for eg. minutes to next possible password reset) by calling:
-```php
-$exception->getMinutesToNextReset();
-```
-#### generateOAuthSetupToken
-
-Used for generate OAuth Token with "Setup" scope. This kind of token is used for create Client and Integration.
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-string | $email | Client's e-mail
-string | $password | Client's password
-
-##### Example
-
-```php
-$twoFAs->generateOAuthSetupToken($email, $password);
-```
-
-##### Response
-
-###### Successful
-
-Only store token in storage without any returned value.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `AuthorizationException` in case of invalid credentials
-
-```php
-Exception 'TwoFAS\Account\Exception\AuthorizationException'
-with message 'Invalid credentials'
-```
-* `ValidationException` if you send invalid data in request [more](#more-validationexception)
-
-```php
-Exception 'TwoFAS\Account\Exception\ValidationException'
-with message 'Validation exception'
-```
-
-#### generateIntegrationSpecificToken
-
-Used for generate OAuth Token with specific scope (which can be found in `\TwoFAS\Account\OAuth\TokenType`) for concrete integration.
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-string | $email    | Client's e-mail
-string | $password | Client's password
-int    | $integrationId | Integration's ID
-
-##### Example
-
-```php
-$twoFAs->generateIntegrationSpecificToken($email, $password, $integrationId);
-```
-
-##### Response
-
-###### Successful
-
-Only store token in storage without any returned value.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-* `AuthorizationException` in case of invalid credentials
-
-```php
-Exception 'TwoFAS\Account\Exception\AuthorizationException'
-with message 'Invalid credentials'
-```
-* `ValidationException` if you send invalid data in request [more](#more-validationexception)
-
-```php
-Exception 'TwoFAS\Account\Exception\ValidationException'
-with message 'Validation exception'
-```
-
-#### getConfig
-
-Used for get public configuration options from 2FAS.
-
-##### Example
-
-```php
-$twoFAs->getConfig();
-```
-
-##### Response
-
-###### Successful
-
-Return array that contains configuration options.
-
-###### Unsuccessful
-
-Method can throw exceptions:
-
-* `Exception` in case of unspecified type of exception
-
-```php
-Exception 'TwoFAS\Account\Exception\Exception'
-with message 'Unsupported response'
-```
-
-#### setBaseUrl
-
-Used to change the address of the server to which the SDK connects.
-
-##### Parameters
-
-Type | Name | Description
---- | --- | ---
-string | $url | Account's API URL
-
-##### Example
-
-```php
-$twoFAs = $twoFAs->setBaseUrl('http://account.api');
-```
-
-##### Response
-
-Returns `\TwoFAS\Account\TwoFAs` instance allowing method chaining.
-
-## Objects
-
-### Card
-
-Card object is returned by:
-
-* [getPrimaryCard](#getprimarycard)
-
-It is an [Entity](https://en.wikipedia.org/wiki/Entity) with methods:
-
-#### Methods
-
-Name | Type | Description
---- | --- | ---
-getId() | int | Get card ID
-setId($id) | Card | Set card ID
-getLastFour() | string | Get last four numbers from Card
-setLastFour($numbers) | Card | Set last four numbers in Card
-getExpMonth() | int | Get month of Card expires
-setExpMonth($month) | Card | Set month of Card expires
-getExpYear() | int | Get year of Card expires
-setExpYear($year) | Card | Set year of Card expires
-
-#### Usage
-```php
-$card
-    ->setId(123)
-    ->setLastFour('1234')
-    ->setExpMonth(4)
-    ->setExpYear(2027);
-
-$id = $card->getId();
-$lastFour = $card->getLastFour();
-```
-### Client
-
-Client object is returned by:
-
-* [getClient](#getclient)
-* [createClient](#createclient)
-
-It is an [Entity](https://en.wikipedia.org/wiki/Entity) with methods:
-
-#### Methods
-
-Name | Type | Description
---- | --- | ---
-getId() | int | Get client ID
-setId($id) | Client | Set client ID
-getEmail() | string | Get client e-mail
-setEmail($mail) | Client | Set client e-mail
-hasCard() | bool | Is client has primary card
-setHasCard($hasCard) | Client | Sets primary card flag
-hasGeneratedPassword() | bool | Is client has password generated automatically
-setHasGeneratedPassword($hasPassword) | Client | Set password generated flag
-getPrimaryCardId() | string | Get primary card ID
-setPrimaryCardId($id) | Client | Set primary card ID
-
-#### Usage
-```php
-$client
-    ->setId(123)
-    ->setEmail('foo@bar.com')
-    ->setPrimaryCardId('jhfd73');
-
-$id = $client->getId();
-$email = $client->getEmail();
-```
-### Integration
-
-Integration object is returned by:
-
-* [getIntegration](#getintegration)
-* [createIntegration](#createintegration)
-* [updateIntegration](#updateintegration)
-
-It is an [Entity](https://en.wikipedia.org/wiki/Entity) with methods:
-
-#### Methods
-
-Name | Type | Description
---- | --- | ---
-getId() | int | Get integration ID
-setId($id) | Client | Set integration ID
-getLogin() | string | Get integration login
-setLogin($login) | Integration | Set integration login
-getName() | string | Get integration name
-setName($name) | Integration | Set integration name
-getPublicKey() | string | Get integration public key
-setPublicKey($key) | Integration | Set integration public key
-getPrivateKey() | string | Get integration private key
-setPrivateKey($key) | Integration | Set integration private key
-getChannels() | array | Get integration channels
-setChannels($channels) | Integration | Set integration channels
-getChannel($name) | bool | Get specific integration channel status
-enableChannel($name) | void | Enable specific integration channel status
-disableChannel($name) | void | Disable specific integration channel status (if any user use this channel, error is returned - use `forceDisableChannel` instead)
-forceDisableChannel($name) | void | Force disable specific integration channel status
-toArray() | array | Converts integration object to array
-
-#### Usage
-```php
+$integrationId = 123;
+$integration = $twoFAS->getIntegration($integrationId);
 $integration
-    ->setId(123)
-    ->setLogin('foo-bar integration')
-    ->setChannels(array(...));
+  ->setName('My New Site')
+  ->enableChannel('email');
+  
+// Update integration  
+$twoFAS->updateIntegration($integration);
 
-$id = $integration->getId();
-$channels = $integration->getChannels();
+// Delete Integration
+$twoFAS->deleteIntegration($integration);
 ```
-### Key
 
-Key object is returned by:
+### Creating Key
 
-* [createKey](#createkey)
+To use our main [SDK](https://github.com/twofas/sdk) you have to create a Key which is used in it to authenticate:
 
-It is an [Entity](https://en.wikipedia.org/wiki/Entity) with methods:
-
-#### Methods
-
-Name | Type | Description
---- | --- | ---
-getToken() | string | Get key token
-
-#### Usage
 ```php
-$key = new Key('57ff5cde6....');
 
-$token = $key->getToken();
+<?php
+// SDK client has been created
+
+$keyName = 'My Key';
+$integrationId = 123;
+$integration = $twoFAS->getIntegration($integrationId);
+
+$twoFAS->createKey($integration->getId(), $keyName);
 ```
-
-## More about exceptions
-
-### ValidationException
-
-Validation exceptions may contain multiple keys and rules.
-For simplicity of integrating this exception has few methods:
-
-#### Methods
-Name | Type | Description
---- | --- | ---
-getErrors() | `array` | Returns all errors as constants
-getError($key) | `array or null` | Returns all failing rules for key (as constants), or null if key passes validation
-getBareError($key) | `array or null` | Returns all failing rules for key (as bare strings), or null if key passes validation
-hasKey($key) | `boolean` | Check if certain field failed validation
-hasError($key, $rule) | `boolean` | Check if certain key failed specified rule

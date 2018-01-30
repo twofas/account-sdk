@@ -4,6 +4,11 @@ namespace TwoFAS\Account\Response;
 
 use TwoFAS\Account\Exception\Exception;
 
+/**
+ * This class converts plain data to Response object.
+ *
+ * @package TwoFAS\Account\Response
+ */
 class ResponseGenerator
 {
     /**
