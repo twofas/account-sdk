@@ -21,7 +21,7 @@ class PasswordResetAttemptsRemainingIsReachedException extends Exception
      * @param Exception|null $previous
      * @param int            $minutesToNextReset
      */
-    public function __construct($message = "", $code = 0, Exception $previous = null, $minutesToNextReset = 0)
+    public function __construct($message = '', $code = 0, Exception $previous = null, $minutesToNextReset = 0)
     {
         parent::__construct($message, $code, $previous);
 

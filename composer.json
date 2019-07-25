@@ -1,7 +1,7 @@
 {
     "name": "twofas/account-sdk",
-    "description": "SDK for 2fas.com Account API",
     "type": "library",
+    "description": "SDK for 2fas.com Account API",
     "license": "MIT",
     "authors": [
         {
@@ -20,6 +20,7 @@
     "require": {
         "php": ">=5.3.3",
         "ext-curl": "*",
+        "ext-json": "*",
         "twofas/validation-rules": "~1.0"
     },
     "require-dev": {

@@ -1,10 +1,14 @@
 <?php
 
+use TwoFAS\Account\Exception\Exception as AccountException;
 use TwoFAS\Account\HttpCodes;
 use TwoFAS\Account\Response\ResponseGenerator;
 
 class PublicConfigTest extends AccountBase
 {
+    /**
+     * @throws AccountException
+     */
     public function testGetConfig()
     {
         $twoFAs     = $this->getTwoFAs();
@@ -12,7 +16,7 @@ class PublicConfigTest extends AccountBase
         $twoFAs->setHttpClient($httpClient);
 
         $expectedResponse = array(
-            'stripe'         => array('public_key' => 'pk_test_pS4JkXi9I3r0ToAieFhg7u7m'),
+            'stripe'         => array('public_key' => 'pk_test_JYoQzIG59RbN8ntc57JrGrlj'),
             'pusher'         => array('app_key' => '18d4d6b1ba877a255a74'),
             'password_reset' => array('resets_per_hour' => 3)
         );

@@ -7,6 +7,7 @@ use TwoFAS\Account\Exception\AuthorizationException;
 use TwoFAS\Account\Exception\Exception;
 use TwoFAS\Account\Exception\NotFoundException;
 use TwoFAS\Account\Exception\PasswordResetAttemptsRemainingIsReachedException;
+use TwoFAS\Account\Exception\TokenRefreshException;
 use TwoFAS\Account\Exception\ValidationException;
 use TwoFAS\Account\HttpClient\ClientInterface;
 use TwoFAS\Account\HttpClient\CurlClient;
@@ -26,7 +27,7 @@ class TwoFAS
     /**
      * @var string
      */
-    const VERSION = '2.0.24';
+    const VERSION = '2.0.25';
 
     /**
      * @var string
@@ -84,7 +85,7 @@ class TwoFAS
     /**
      * Set API url.
      *
-     * @param  string $url
+     * @param string $url
      *
      * @return TwoFAS
      */
@@ -214,7 +215,6 @@ class TwoFAS
         throw $response->getError();
     }
 
-
     /**
      * Used for updating integration data.
      *
@@ -242,7 +242,7 @@ class TwoFAS
     }
 
     /**
-     * Used for deleting integration.
+     * Used for changing integrations encryption keys
      *
      * @param Integration $integration
      *
@@ -262,6 +262,38 @@ class TwoFAS
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
             return $this->hydrator->getIntegrationFromResponseData($response->getData());
+        }
+
+        throw $response->getError();
+    }
+
+    /**
+     * Used for refreshing authorisation tokens
+     *
+     * @param Token $token
+     *
+     * @return void
+     *
+     * @throws Exception
+     * @throws TokenNotFoundException
+     * @throws TokenRefreshException
+     */
+    public function refreshToken(Token $token)
+    {
+        $response = $this->call(
+            TokenType::fromString($token->getType()),
+            'PUT',
+            $this->createEndpoint('/me/tokens/refresh')
+        );
+
+        if ($response->matchesHttpCode(HttpCodes::OK)) {
+            $responseData = $response->getData();
+            $accessToken  = $responseData['token']['accessToken'];
+
+            $refreshedToken = new Token($token->getType(), $accessToken, $token->getIntegrationId());
+            $this->tokenStorage->storeToken($refreshedToken);
+
+            return;
         }
 
         throw $response->getError();

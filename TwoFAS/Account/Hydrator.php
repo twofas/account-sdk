@@ -34,12 +34,6 @@ class Hydrator
             ->setId($responseData['id'])
             ->setLogin($responseData['login'])
             ->setName($responseData['name'])
-            ->setChannels(array(
-                'sms'   => $responseData['channel_sms'],
-                'call'  => $responseData['channel_call'],
-                'email' => $responseData['channel_email'],
-                'totp'  => $responseData['channel_totp'],
-            ))
             ->setPublicKey($responseData['public_key'])
             ->setPrivateKey($responseData['private_key']);
 

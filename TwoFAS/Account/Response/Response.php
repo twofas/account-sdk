@@ -7,6 +7,7 @@ use TwoFAS\Account\Exception\AuthorizationException;
 use TwoFAS\Account\Exception\Exception;
 use TwoFAS\Account\Exception\NotFoundException;
 use TwoFAS\Account\Exception\PasswordResetAttemptsRemainingIsReachedException;
+use TwoFAS\Account\Exception\TokenRefreshException;
 use TwoFAS\Account\Exception\ValidationException;
 use TwoFAS\Account\HttpCodes;
 
@@ -60,6 +61,10 @@ class Response
     {
         if ($this->matchesHttpAndErrorCode(HttpCodes::BAD_REQUEST, Errors::USER_INPUT_ERROR)) {
             return new ValidationException($this->getErrorMessage());
+        }
+
+        if ($this->matchesHttpAndErrorCode(HttpCodes::BAD_REQUEST, Errors::TOKEN_SHOULD_NOT_BE_REFRESHED)) {
+            return new TokenRefreshException($this->getErrorMessage());
         }
 
         if ($this->isAuthorizationError()) {

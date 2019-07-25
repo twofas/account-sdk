@@ -1,17 +1,17 @@
 <?php
 
 use TwoFAS\Account\Exception\ValidationException;
-use TwoFAS\Account\ValidationRules;
+use TwoFAS\ValidationRules\ValidationRules;
 
 class ValidationExceptionTest extends PHPUnit_Framework_TestCase
 {
     public function testRequiredValidationRule()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "code" => array(
-                    "validation.required"
+            'code' => 9030,
+            'msg'  => array(
+                'code' => array(
+                    'validation.required'
                 )
             )
         ));
@@ -23,10 +23,10 @@ class ValidationExceptionTest extends PHPUnit_Framework_TestCase
     public function testRequiredWithValidationRule()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "code" => array(
-                    "validation.required_with:sms"
+            'code' => 9030,
+            'msg'  => array(
+                'code' => array(
+                    'validation.required_with:sms'
                 )
             )
         ));
@@ -38,10 +38,10 @@ class ValidationExceptionTest extends PHPUnit_Framework_TestCase
     public function testRequiredIfValidationRule()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "code" => array(
-                    "validation.required_if:method,sms,call"
+            'code' => 9030,
+            'msg'  => array(
+                'code' => array(
+                    'validation.required_if:method,sms,call'
                 )
             )
         ));
@@ -53,10 +53,10 @@ class ValidationExceptionTest extends PHPUnit_Framework_TestCase
     public function testUniqueValidationRule()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "code" => array(
-                    "validation.unique"
+            'code' => 9030,
+            'msg'  => array(
+                'code' => array(
+                    'validation.unique'
                 )
             )
         ));
@@ -68,10 +68,10 @@ class ValidationExceptionTest extends PHPUnit_Framework_TestCase
     public function testUniquePhoneNumberValidationRule()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "code" => array(
-                    "validation.unique_phone_number"
+            'code' => 9030,
+            'msg'  => array(
+                'code' => array(
+                    'validation.unique_phone_number'
                 )
             )
         ));
@@ -83,10 +83,10 @@ class ValidationExceptionTest extends PHPUnit_Framework_TestCase
     public function testRegexDot()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "code" => array(
-                    "validationDstring"
+            'code' => 9030,
+            'msg'  => array(
+                'code' => array(
+                    'validationDstring'
                 )
             )
         ));
@@ -98,10 +98,10 @@ class ValidationExceptionTest extends PHPUnit_Framework_TestCase
     public function testUnsupportedValidationRule()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "code" => array(
-                    "validation.new_not_existing"
+            'code' => 9030,
+            'msg'  => array(
+                'code' => array(
+                    'validation.new_not_existing'
                 )
             )
         ));
@@ -113,75 +113,75 @@ class ValidationExceptionTest extends PHPUnit_Framework_TestCase
     public function testGetErrors()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "code"        => array(
-                    "validation.required"
+            'code' => 9030,
+            'msg'  => array(
+                'code'        => array(
+                    'validation.required'
                 ),
-                "method"      => array(
-                    "validation.string",
-                    "validation.client_has_no_integrations_with_paid_method_if_card_is_primary"
+                'method'      => array(
+                    'validation.string',
+                    'validation.client_has_no_integrations_with_paid_method_if_card_is_primary'
                 ),
-                "phone"       => array(
-                    "validation.two_f_a_s_formattable"
+                'phone'       => array(
+                    'validation.two_f_a_s_formattable'
                 ),
-                "totp_secret" => array(
-                    "validation.not_exists"
+                'totp_secret' => array(
+                    'validation.not_exists'
                 ),
-                "email"       => array(
-                    "validation.required_if:method,email"
+                'email'       => array(
+                    'validation.required_if:method,email'
                 ),
-                "call"        => array(
-                    "validation.max,string",
-                    "validation.regex"
+                'call'        => array(
+                    'validation.max,string',
+                    'validation.regex'
                 ),
-                "channel"     => array(
-                    "validation.channel_enabling_rules"
+                'channel'     => array(
+                    'validation.channel_enabling_rules'
                 ),
-                "source"      => array(
-                    "validation.valid_client_source"
+                'source'      => array(
+                    'validation.valid_client_source'
                 ),
-                "password"    => array(
-                    "validation.client_password_equals"
+                'password'    => array(
+                    'validation.client_password_equals'
                 ),
-                "key"         => array(
-                    "validation.valid_key_type"
+                'key'         => array(
+                    'validation.valid_key_type'
                 )
             )
         ));
 
         $expectedErrors = array(
-            "code"        => array(
-                "validation.required"
+            'code'        => array(
+                'validation.required'
             ),
-            "method"      => array(
-                "validation.string",
-                "validation.client_has_no_integrations_with_paid_method_if_card_is_primary"
+            'method'      => array(
+                'validation.string',
+                'validation.client_has_no_integrations_with_paid_method_if_card_is_primary'
             ),
-            "phone"       => array(
-                "validation.two_f_a_s_formattable"
+            'phone'       => array(
+                'validation.two_f_a_s_formattable'
             ),
-            "totp_secret" => array(
-                "validation.unsupported"
+            'totp_secret' => array(
+                'validation.unsupported'
             ),
-            "email"       => array(
-                "validation.required_if"
+            'email'       => array(
+                'validation.required_if'
             ),
-            "call"        => array(
-                "validation.unsupported",
-                "validation.regex"
+            'call'        => array(
+                'validation.unsupported',
+                'validation.regex'
             ),
-            "channel"     => array(
-                "validation.channel_enabling_rules"
+            'channel'     => array(
+                'validation.channel_enabling_rules'
             ),
-            "source"      => array(
-                "validation.valid_client_source"
+            'source'      => array(
+                'validation.valid_client_source'
             ),
-            "password"    => array(
-                "validation.client_password_equals"
+            'password'    => array(
+                'validation.client_password_equals'
             ),
-            "key"         => array(
-                "validation.valid_key_type"
+            'key'         => array(
+                'validation.valid_key_type'
             )
         );
 
@@ -192,51 +192,51 @@ class ValidationExceptionTest extends PHPUnit_Framework_TestCase
     public function testGetBareError()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "totp_secret" => array(
-                    "validation.string,unique"
+            'code' => 9030,
+            'msg'  => array(
+                'totp_secret' => array(
+                    'validation.string,unique'
                 ),
-                "email"       => array(
-                    "validation.required_if:method,email"
+                'email'       => array(
+                    'validation.required_if:method,email'
                 ),
-                "call"        => array(
-                    "validation.max,string",
-                    "validation.regex"
+                'call'        => array(
+                    'validation.max,string',
+                    'validation.regex'
                 )
             )
         ));
 
         $exception = $this->getException($errors);
-        $this->assertEquals(array("validation.string,unique"), $exception->getBareError("totp_secret"));
-        $this->assertEquals(array("validation.required_if:method,email"), $exception->getBareError("email"));
-        $this->assertEquals(array("validation.max,string", "validation.regex"), $exception->getBareError("call"));
+        $this->assertEquals(array('validation.string,unique'), $exception->getBareError('totp_secret'));
+        $this->assertEquals(array('validation.required_if:method,email'), $exception->getBareError('email'));
+        $this->assertEquals(array('validation.max,string', 'validation.regex'), $exception->getBareError('call'));
     }
 
     public function testHasError()
     {
         $errors = array('error' => array(
-            "code" => 9030,
-            "msg"  => array(
-                "totp_secret" => array(
-                    "validation.string"
+            'code' => 9030,
+            'msg'  => array(
+                'totp_secret' => array(
+                    'validation.string'
                 ),
-                "email"       => array(
-                    "validation.required_if:method,email"
+                'email'       => array(
+                    'validation.required_if:method,email'
                 ),
-                "call"        => array(
-                    "validation.max,string",
-                    "validation.regex"
+                'call'        => array(
+                    'validation.max,string',
+                    'validation.regex'
                 )
             )
         ));
 
         $exception = $this->getException($errors);
-        $this->assertTrue($exception->hasError("totp_secret", ValidationRules::STRING));
-        $this->assertTrue($exception->hasError("email", ValidationRules::REQUIRED_IF));
-        $this->assertFalse($exception->hasError("email", ValidationRules::REQUIRED));
-        $this->assertTrue($exception->hasError("call", ValidationRules::REGEX));
-        $this->assertFalse($exception->hasError("call", ValidationRules::MAX));
+        $this->assertTrue($exception->hasError('totp_secret', ValidationRules::STRING));
+        $this->assertTrue($exception->hasError('email', ValidationRules::REQUIRED_IF));
+        $this->assertFalse($exception->hasError('email', ValidationRules::REQUIRED));
+        $this->assertTrue($exception->hasError('call', ValidationRules::REGEX));
+        $this->assertFalse($exception->hasError('call', ValidationRules::MAX));
     }
 
     public function testStrictMode()

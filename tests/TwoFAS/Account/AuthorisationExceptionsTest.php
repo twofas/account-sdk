@@ -1,11 +1,17 @@
 <?php
 
 use TwoFAS\Account\Errors;
+use TwoFAS\Account\Exception\ValidationException;
 use TwoFAS\Account\HttpCodes;
 use TwoFAS\Account\Response\ResponseGenerator;
+use TwoFAS\Account\Exception\Exception as AccountException;
 
 class AuthorisationExceptionsTest extends AccountBase
 {
+    /**
+     * @throws AccountException
+     * @throws ValidationException
+     */
     public function testCreateIntegrationWithoutKey()
     {
         $twoFAs     = $this->getEmptyTwoFAS();
@@ -17,6 +23,10 @@ class AuthorisationExceptionsTest extends AccountBase
         $twoFAs->createIntegration('Unauthorized integration');
     }
 
+    /**
+     * @throws ValidationException
+     * @throws AccountException
+     */
     public function testCallMethodWhichRequiresAuthenticationWithRandomKey()
     {
         $twoFAs     = $this->getTwoFASWithRandomKeys();
@@ -39,6 +49,10 @@ class AuthorisationExceptionsTest extends AccountBase
         $twoFAs->createIntegration('Unauthorized integration');
     }
 
+    /**
+     * @throws ValidationException
+     * @throws AccountException
+     */
     public function testCallMethodWhichRequiresAuthenticationWithRevokedKey()
     {
         $twoFAs     = $this->getTwoFASWithRevokedKeys();
