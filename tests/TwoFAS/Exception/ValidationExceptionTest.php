@@ -1,7 +1,7 @@
 <?php
 
 use TwoFAS\Account\Exception\ValidationException;
-use TwoFAS\ValidationRules\ValidationRules;
+use TwoFAS\Account\ValidationRules;
 
 class ValidationExceptionTest extends PHPUnit_Framework_TestCase
 {

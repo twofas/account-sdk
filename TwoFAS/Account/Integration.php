@@ -2,6 +2,8 @@
 
 namespace TwoFAS\Account;
 
+use InvalidArgumentException;
+
 /**
  * This is an Entity that stores information about integration.
  *
@@ -25,6 +27,16 @@ final class Integration
     private $name;
 
     /**
+     * @var array
+     */
+    private $channels = array(
+        'sms'   => null,
+        'call'  => null,
+        'email' => null,
+        'totp'  => null
+    );
+
+    /**
      * @var string
      */
     private $publicKey;
@@ -37,12 +49,101 @@ final class Integration
     /**
      * @return array
      */
+    public function getChannels()
+    {
+        return $this->channels;
+    }
+
+    /**
+     * @param array $channels
+     *
+     * @return Integration
+     *
+     * @throws InvalidArgumentException
+     */
+    public function setChannels(array $channels)
+    {
+        foreach ($channels as $name => $value) {
+            if (!$this->hasChannel($name)) {
+                throw new InvalidArgumentException('Invalid channel name');
+            }
+
+            $this->channels[$name] = (bool) $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getChannel($name)
+    {
+        if (!$this->hasChannel($name)) {
+            throw new InvalidArgumentException('Invalid channel name');
+        }
+
+        return $this->channels[$name];
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws InvalidArgumentException
+     */
+    public function enableChannel($name)
+    {
+        if (!$this->hasChannel($name)) {
+            throw new InvalidArgumentException('Invalid channel name');
+        }
+
+        $this->channels[$name] = true;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws InvalidArgumentException
+     */
+    public function forceDisableChannel($name)
+    {
+        if (!$this->hasChannel($name)) {
+            throw new InvalidArgumentException('Invalid channel name');
+        }
+
+        $this->disableChannel($name);
+        $this->channels[$name . '_force_disable'] = true;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws InvalidArgumentException
+     */
+    public function disableChannel($name)
+    {
+        if (!$this->hasChannel($name)) {
+            throw new InvalidArgumentException('Invalid channel name');
+        }
+
+        $this->channels[$name] = false;
+    }
+
+    /**
+     * @return array
+     */
     public function toArray()
     {
-        return array(
+        return array_merge(array(
             'id'    => $this->getId(),
             'login' => $this->getLogin(),
             'name'  => $this->getName()
+        ),
+            $this->getChannelsWithPrefix()
         );
     }
 
@@ -139,5 +240,31 @@ final class Integration
     {
         $this->privateKey = $privateKey;
         return $this;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    private function hasChannel($name)
+    {
+        return array_key_exists($name, $this->channels);
+    }
+
+    /**
+     * @return array
+     */
+    private function getChannelsWithPrefix()
+    {
+        return array_combine(
+            array_map(
+                function($key) {
+                    return 'channel_' . $key;
+                },
+                array_keys($this->channels)
+            ),
+            $this->channels
+        );
     }
 }

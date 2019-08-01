@@ -87,6 +87,7 @@ $twoFAS->generateIntegrationSpecificToken($email, $password, $integration->getId
 ### Managing integration
 
 After creating integration, you can update its attributes (e.g. name) 
+or decide which channels should be enabled for this integration.
 
 ```php
 
@@ -95,7 +96,9 @@ After creating integration, you can update its attributes (e.g. name)
 
 $integrationId = 123;
 $integration = $twoFAS->getIntegration($integrationId);
-$integration->setName('My New Site');
+$integration
+  ->setName('My New Site')
+  ->enableChannel('email');
   
 // Update integration  
 $twoFAS->updateIntegration($integration);
