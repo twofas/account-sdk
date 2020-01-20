@@ -1,10 +1,10 @@
 <?php
 
 use TwoFAS\Account\Errors;
+use TwoFAS\Account\Exception\Exception as AccountException;
 use TwoFAS\Account\Exception\ValidationException;
 use TwoFAS\Account\HttpCodes;
 use TwoFAS\Account\Response\ResponseGenerator;
-use TwoFAS\Account\Exception\Exception as AccountException;
 
 class AuthorisationExceptionsTest extends AccountBase
 {
@@ -34,12 +34,12 @@ class AuthorisationExceptionsTest extends AccountBase
         $twoFAs->setHttpClient($httpClient);
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = array(
-                'error' => array(
+            $response = [
+                'error' => [
                     'code' => Errors::UNAUTHORIZED,
                     'msg'  => 'Unauthorized'
-                )
-            );
+                ]
+            ];
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::UNAUTHORIZED));
         }
@@ -60,12 +60,12 @@ class AuthorisationExceptionsTest extends AccountBase
         $twoFAs->setHttpClient($httpClient);
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = array(
-                'error' => array(
+            $response = [
+                'error' => [
                     'code' => Errors::UNAUTHORIZED,
                     'msg'  => 'Unauthorized'
-                )
-            );
+                ]
+            ];
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::UNAUTHORIZED));
         }

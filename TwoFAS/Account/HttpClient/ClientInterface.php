@@ -14,5 +14,5 @@ interface ClientInterface
      *
      * @return Response
      */
-    public function request($method, $endpoint, array $data = array(), array $headers = array());
+    public function request($method, $endpoint, array $data = [], array $headers = []);
 }

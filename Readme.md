@@ -2,7 +2,7 @@
 
 This SDK is used to create and manage an account in 2FAS from your PHP application.
 The latest version of the 2FAS SDK can be found on [Github](https://github.com/twofas/account-sdk). 
-The 2FAS SDK requires PHP version 5.3.3 or higher. 
+The 2FAS SDK requires PHP version 5.4 or higher. 
 
 > **Note**: API reference for this SDK is available [here](https://docs.2fas.com/account)
 
@@ -11,7 +11,7 @@ Follow these steps to create an account in 2FAS:
 1. [Installation and creating account](#installation-and-creating-account)
 2. [Managing account](#managing-account)
 
-**Full documentation for our SDK can be found [here](https://docs.2fas.com/apigen/Account)**
+**Full documentation for our SDK can be found [here](https://docs.2fas.com/account)**
 
 ## Installation and creating account
 
@@ -20,7 +20,7 @@ You can add the PHP SDK to your [composer.json](https://getcomposer.org/doc/04-s
 file with the [require](https://getcomposer.org/doc/03-cli.md#require) command:
 
 ```php
-composer require twofas/account-sdk : "2.*"
+composer require twofas/account-sdk : "4.*"
 ```
 
 If you are using a framework like Symfony or Laravel, the 2FAS SDK may be automatically loaded for you and ready to use in your application. 
@@ -43,7 +43,7 @@ require __DIR__ . '/vendor/autoload.php';
 $tokenStorage = new MyTokenStorage();
 $tokenType = TokenType::api();
 
-$twoFAS = new \TwoFAS\Account\TwoFAS($tokenStorage, $tokenType);
+$twoFAS = new \TwoFAS\Account\Sdk($tokenStorage, $tokenType);
 ```
 
 ### Creating Account
@@ -59,7 +59,7 @@ $email = 'foo@example.com';
 $password = $passwordConfirmation = 'You secret password';
 $source = 'api';
 
-$client = $twofas->createClient($email, $password, $passwordConfirmation, $source);
+$client = $sdk->createClient($email, $password, $passwordConfirmation, $source);
 ```
 
 ### Creating OAuth Tokens
@@ -77,9 +77,9 @@ $email = 'foo@example.com';
 $password = 'Your secret password';
 $name = 'My Site';
 
-$twoFAS->generateOAuthSetupToken($email, $password);
-$integration = $twoFAS->createIntegration($name);
-$twoFAS->generateIntegrationSpecificToken($email, $password, $integration->getId());
+$sdk->generateOAuthSetupToken($email, $password);
+$integration = $sdk->createIntegration($name);
+$sdk->generateIntegrationSpecificToken($email, $password, $integration->getId());
 ```
 
 ## Managing account
@@ -94,28 +94,12 @@ After creating integration, you can update its attributes (e.g. name)
 // SDK client and Account has been created
 
 $integrationId = 123;
-$integration = $twoFAS->getIntegration($integrationId);
+$integration = $sdk->getIntegration($integrationId);
 $integration->setName('My New Site');
   
 // Update integration  
-$twoFAS->updateIntegration($integration);
+$sdk->updateIntegration($integration);
 
 // Delete Integration
-$twoFAS->deleteIntegration($integration);
-```
-
-### Creating Key
-
-To use our main [SDK](https://github.com/twofas/sdk) you have to create a Key which is used in it to authenticate:
-
-```php
-
-<?php
-// SDK client has been created
-
-$keyName = 'My Key';
-$integrationId = 123;
-$integration = $twoFAS->getIntegration($integrationId);
-
-$twoFAS->createKey($integration->getId(), $keyName);
+$sdk->deleteIntegration($integration);
 ```

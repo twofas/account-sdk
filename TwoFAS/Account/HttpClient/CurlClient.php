@@ -33,7 +33,7 @@ class CurlClient implements ClientInterface
      *
      * @throws Exception
      */
-    public function request($method, $endpoint, array $data = array(), array $headers = array())
+    public function request($method, $endpoint, array $data = [], array $headers = [])
     {
         $jsonInput = json_encode($data);
 

@@ -22,7 +22,7 @@ class ResponseGenerator
     public static function createFrom($body, $code)
     {
         if ('' === $body) {
-            return new Response(array(), $code);
+            return new Response([], $code);
         }
 
         $decoded = @json_decode($body, true);

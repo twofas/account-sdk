@@ -29,8 +29,9 @@ class PasswordResetTest extends AccountBase
 
         if ($this->isDevelopmentEnvironment()) {
             $response = $this->getExpectedValidationBody(
-                array('email' => array('validation.required')
-                )
+                [
+                    'email' => ['validation.required']
+                ]
             );
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::BAD_REQUEST));
@@ -48,12 +49,12 @@ class PasswordResetTest extends AccountBase
         $twoFAs->setHttpClient($httpClient);
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = array(
-                'error' => array(
+            $response = [
+                'error' => [
                     'code' => 10404,
                     'msg'  => 'No data matching given criteria'
-                )
-            );
+                ]
+            ];
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::NOT_FOUND));
         }

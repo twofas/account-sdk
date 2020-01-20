@@ -4,7 +4,7 @@ use TwoFAS\Account\Errors;
 use TwoFAS\Account\HttpClient\CurlClient;
 use TwoFAS\Account\OAuth\Interfaces\TokenStorage;
 use TwoFAS\Account\OAuth\TokenType;
-use TwoFAS\Account\TwoFAS;
+use TwoFAS\Account\Sdk;
 
 abstract class AccountBase extends PHPUnit_Framework_TestCase
 {
@@ -22,12 +22,12 @@ abstract class AccountBase extends PHPUnit_Framework_TestCase
     /**
      * @param array $headers
      *
-     * @return TwoFAS
+     * @return Sdk
      */
-    protected function getTwoFAs(array $headers = array())
+    protected function getTwoFAs(array $headers = [])
     {
         $tokenStorage = new FilledStorage();
-        $twoFAs       = new TwoFAS($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
+        $twoFAs       = new Sdk($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
         $twoFAs->setBaseUrl($this->baseUrl);
 
         return $twoFAs;
@@ -36,12 +36,12 @@ abstract class AccountBase extends PHPUnit_Framework_TestCase
     /**
      * @param array $headers
      *
-     * @return TwoFAS
+     * @return Sdk
      */
-    protected function getTwoFASWithRandomKeys(array $headers = array())
+    protected function getTwoFASWithRandomKeys(array $headers = [])
     {
         $tokenStorage = new RandomStorage();
-        $twoFAs       = new TwoFAS($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
+        $twoFAs       = new Sdk($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
         $twoFAs->setBaseUrl($this->baseUrl);
 
         return $twoFAs;
@@ -50,12 +50,12 @@ abstract class AccountBase extends PHPUnit_Framework_TestCase
     /**
      * @param array $headers
      *
-     * @return TwoFAS
+     * @return Sdk
      */
-    protected function getTwoFASWithRevokedKeys(array $headers = array())
+    protected function getTwoFASWithRevokedKeys(array $headers = [])
     {
         $tokenStorage = new RevokedStorage();
-        $twoFAs       = new TwoFAS($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
+        $twoFAs       = new Sdk($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
         $twoFAs->setBaseUrl($this->baseUrl);
 
         return $twoFAs;
@@ -64,9 +64,9 @@ abstract class AccountBase extends PHPUnit_Framework_TestCase
     /**
      * @param array $headers
      *
-     * @return TwoFAS
+     * @return Sdk
      */
-    protected function getEmptyTwoFAS(array $headers = array())
+    protected function getEmptyTwoFAS(array $headers = [])
     {
         list($twoFAs) = $this->getEmptyTwoFASAndStorage($headers);
 
@@ -78,24 +78,24 @@ abstract class AccountBase extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function getEmptyTwoFASAndStorage(array $headers = array())
+    protected function getEmptyTwoFASAndStorage(array $headers = [])
     {
         $tokenStorage = new ArrayStorage();
-        $twoFAs       = new TwoFAS($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
+        $twoFAs       = new Sdk($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
         $twoFAs->setBaseUrl($this->baseUrl);
 
-        return array($twoFAs, $tokenStorage);
+        return [$twoFAs, $tokenStorage];
     }
 
     /**
      * @param TokenStorage $tokenStorage
      * @param array        $headers
      *
-     * @return TwoFAS
+     * @return Sdk
      */
-    protected function getEmptyTwoFASWithCustomStorage(TokenStorage $tokenStorage, array $headers = array())
+    protected function getEmptyTwoFASWithCustomStorage(TokenStorage $tokenStorage, array $headers = [])
     {
-        $twoFAs = new TwoFAS($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
+        $twoFAs = new Sdk($tokenStorage, TokenType::wordpress(), $this->addEnvHeaders($headers));
         $twoFAs->setBaseUrl($this->baseUrl);
 
         return $twoFAs;
@@ -120,12 +120,12 @@ abstract class AccountBase extends PHPUnit_Framework_TestCase
      */
     protected function getExpectedValidationBody(array $rules)
     {
-        return array(
-            'error' => array(
+        return [
+            'error' => [
                 'code' => Errors::USER_INPUT_ERROR,
                 'msg'  => $rules
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -140,7 +140,7 @@ abstract class AccountBase extends PHPUnit_Framework_TestCase
         }
 
         return array_merge(
-            $headers, array('x-forwarded-proto' => 'https')
+            $headers, ['x-forwarded-proto' => 'https']
         );
     }
 

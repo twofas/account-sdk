@@ -18,17 +18,12 @@ class IntegrationsTest extends AccountBase
         $publicKey  = 'MDwwDQYJKoZIhvcNAQEBBQADKwAwKAIhAKcUvrdzek84BGT1tL5N0SCaknnmAmuU4WPG3tdBsz8LAgMBAAE=';
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = json_encode(array(
-                'id'            => getenv('integration_id'),
-                'login'         => 'login',
-                'name'          => $name,
-                'channel_sms'   => false,
-                'channel_call'  => false,
-                'channel_email' => false,
-                'channel_totp'  => true,
-                'public_key'    => $publicKey,
-                'private_key'   => $privateKey,
-            ));
+            $response = json_encode([
+                'id'          => getenv('integration_id'),
+                'name'        => $name,
+                'public_key'  => $publicKey,
+                'private_key' => $privateKey
+            ]);
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom($response, HttpCodes::CREATED));
         }
@@ -38,10 +33,8 @@ class IntegrationsTest extends AccountBase
         $this->assertInstanceOf('\TwoFAS\Account\Integration', $integration);
         if ($this->isDevelopmentEnvironment()) {
             $this->assertEquals(getenv('integration_id'), $integration->getId());
-            $this->assertEquals('login', $integration->getLogin());
         }
         $this->assertNotEmpty($integration->getId());
-        $this->assertNotEmpty($integration->getLogin());
         $this->assertEquals($name, $integration->getName());
         $this->assertNotNull($integration->getPublicKey());
         $this->assertNotNull($privateKey, $integration->getPrivateKey());
@@ -57,7 +50,7 @@ class IntegrationsTest extends AccountBase
         $publicKey  = 'MDwwDQYJKoZIhvcNAQEBBQADKwAwKAIhAKcUvrdzek84BGT1tL5N0SCaknnmAmuU4WPG3tdBsz8LAgMBAAE=';
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = json_encode(array(
+            $response = json_encode([
                 'id'            => getenv('integration_id'),
                 'login'         => 'sdk-website',
                 'name'          => 'name',
@@ -67,7 +60,7 @@ class IntegrationsTest extends AccountBase
                 'channel_totp'  => true,
                 'public_key'    => $publicKey,
                 'private_key'   => $privateKey
-            ));
+            ]);
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom($response, HttpCodes::OK));
         }
@@ -75,7 +68,6 @@ class IntegrationsTest extends AccountBase
         $integration = $twoFAs->getIntegration(getenv('integration_id'));
         $this->assertInstanceOf('\TwoFAS\Account\Integration', $integration);
         $this->assertEquals(getenv('integration_id'), $integration->getId());
-        $this->assertEquals('sdk-website', $integration->getLogin());
         $this->assertEquals('name', $integration->getName());
         $this->assertEquals($publicKey, $integration->getPublicKey());
         $this->assertEquals($privateKey, $integration->getPrivateKey());
@@ -88,7 +80,7 @@ class IntegrationsTest extends AccountBase
         $twoFAs->setHttpClient($httpClient);
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = array(
+            $response = [
                 'id'            => 1,
                 'login'         => 'login',
                 'name'          => 'new_name',
@@ -96,7 +88,7 @@ class IntegrationsTest extends AccountBase
                 'channel_call'  => false,
                 'channel_email' => true,
                 'channel_totp'  => true
-            );
+            ];
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::OK));
         }
@@ -104,14 +96,12 @@ class IntegrationsTest extends AccountBase
         $integration = new Integration();
         $integration
             ->setId(getenv('integration_id'))
-            ->setLogin('login')
             ->setName('name');
 
         $integration->setName('new_name');
         $twoFAs->updateIntegration($integration);
 
         $this->assertEquals(getenv('integration_id'), $integration->getId());
-        $this->assertEquals('login', $integration->getLogin());
         $this->assertEquals('new_name', $integration->getName());
     }
 
@@ -122,7 +112,7 @@ class IntegrationsTest extends AccountBase
         $twoFAs->setHttpClient($httpClient);
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = array(
+            $response = [
                 'id'            => 1,
                 'login'         => 'login',
                 'name'          => 'new_name',
@@ -132,7 +122,7 @@ class IntegrationsTest extends AccountBase
                 'channel_totp'  => true,
                 'private_key'   => str_repeat('a', 700),
                 'public_key'    => str_repeat('b', 300)
-            );
+            ];
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::OK));
         }
@@ -140,7 +130,6 @@ class IntegrationsTest extends AccountBase
         $integration = new Integration();
         $integration
             ->setId(getenv('integration_id'))
-            ->setLogin('login')
             ->setName('name');
 
         $this->assertNull($integration->getPublicKey());
@@ -164,9 +153,9 @@ class IntegrationsTest extends AccountBase
 
         if ($this->isDevelopmentEnvironment()) {
             $response = $this->getExpectedValidationBody(
-                array(
-                    'name' => array('validation.string')
-                )
+                [
+                    'name' => ['validation.string']
+                ]
             );
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::BAD_REQUEST));
@@ -209,10 +198,10 @@ class IntegrationsTest extends AccountBase
         $integration->setId(999999999999);
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = array('error' => array(
+            $response = ['error' => [
                 'code' => 10404,
                 'msg'  => 'No data matching given criteria'
-            ));
+            ]];
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(
                 json_encode($response),

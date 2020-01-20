@@ -16,20 +16,22 @@ class ArrayStorage implements TokenStorage
      */
     public function __construct()
     {
-        $this->tokens = array();
+        $this->tokens = [];
     }
 
     /**
      * @inheritdoc
      */
-    public function storeToken(Token $token) {
+    public function storeToken(Token $token)
+    {
         $this->tokens[$token->getType()] = $token;
     }
 
     /**
      * @inheritdoc
      */
-    public function retrieveToken($type) {
+    public function retrieveToken($type)
+    {
         if (array_key_exists($type, $this->tokens)) {
             return $this->tokens[$type];
         }

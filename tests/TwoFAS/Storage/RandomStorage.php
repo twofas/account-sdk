@@ -9,14 +9,16 @@ class RandomStorage implements TokenStorage
     /**
      * @inheritdoc
      */
-    public function storeToken(Token $token) {
-        throw new \LogicException();
+    public function storeToken(Token $token)
+    {
+        throw new LogicException();
     }
 
     /**
      * @inheritdoc
      */
-    public function retrieveToken($type) {
+    public function retrieveToken($type)
+    {
         if ($type === 'wordpress') {
             return new Token('wordpress', 'abc.def.abc', 0);
         }

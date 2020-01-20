@@ -9,14 +9,16 @@ class RevokedStorage implements TokenStorage
     /**
      * @inheritdoc
      */
-    public function storeToken(Token $token) {
-        throw new \LogicException();
+    public function storeToken(Token $token)
+    {
+        throw new LogicException();
     }
 
     /**
      * @inheritdoc
      */
-    public function retrieveToken($type) {
+    public function retrieveToken($type)
+    {
         if ($type === 'setup') {
             return new Token('setup', getenv('oauth_setup_revoked_token'), 0);
         }

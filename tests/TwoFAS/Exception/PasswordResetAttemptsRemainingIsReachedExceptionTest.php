@@ -15,13 +15,15 @@ class PasswordResetAttemptsRemainingIsReachedExceptionTest extends AccountBase
 
         $minutesToNextReset = 12;
 
-        $response = json_encode(array('error' => array(
-            'code'    => 14403,
-            'msg'     => 'Limit of password reset attempts is already reached',
-            'payload' => array(
-                'minutes_to_next_reset' => $minutesToNextReset
-            )
-        )));
+        $response = json_encode([
+            'error' => [
+                'code'    => 14403,
+                'msg'     => 'Limit of password reset attempts is already reached',
+                'payload' => [
+                    'minutes_to_next_reset' => $minutesToNextReset
+                ]
+            ]
+        ]);
 
         $httpClient->method('request')->willReturn(ResponseGenerator::createFrom($response, HttpCodes::FORBIDDEN));
 

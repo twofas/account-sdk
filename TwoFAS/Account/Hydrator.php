@@ -32,7 +32,6 @@ class Hydrator
         $integration = new Integration();
         $integration
             ->setId($responseData['id'])
-            ->setLogin($responseData['login'])
             ->setName($responseData['name'])
             ->setPublicKey($responseData['public_key'])
             ->setPrivateKey($responseData['private_key']);

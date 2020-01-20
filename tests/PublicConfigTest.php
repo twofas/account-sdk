@@ -15,11 +15,11 @@ class PublicConfigTest extends AccountBase
         $httpClient = $this->getHttpClient();
         $twoFAs->setHttpClient($httpClient);
 
-        $expectedResponse = array(
-            'stripe'         => array('public_key' => 'pk_test_JYoQzIG59RbN8ntc57JrGrlj'),
-            'pusher'         => array('app_key' => '18d4d6b1ba877a255a74'),
-            'password_reset' => array('resets_per_hour' => 3)
-        );
+        $expectedResponse = [
+            'stripe'         => ['public_key' => 'pk_test_JYoQzIG59RbN8ntc57JrGrlj'],
+            'pusher'         => ['app_key' => '18d4d6b1ba877a255a74'],
+            'password_reset' => ['resets_per_hour' => 3]
+        ];
 
         if ($this->isDevelopmentEnvironment()) {
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($expectedResponse), HttpCodes::OK));

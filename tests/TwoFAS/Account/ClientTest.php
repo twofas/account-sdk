@@ -16,13 +16,13 @@ class ClientTest extends AccountBase
         $cardId   = getenv('card_id');
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = json_encode(array(
+            $response = json_encode([
                 'id'                     => $clientId,
                 'email'                  => $email,
                 'has_card'               => true,
                 'has_generated_password' => true,
                 'primary_card_id'        => $cardId
-            ));
+            ]);
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom($response, HttpCodes::OK));
         }
@@ -48,13 +48,13 @@ class ClientTest extends AccountBase
         $password = 'simple';
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = json_encode(array(
+            $response = json_encode([
                 'id'                     => 1,
                 'email'                  => $email,
                 'has_card'               => false,
                 'has_generated_password' => true,
                 'primary_card_id'        => null
-            ));
+            ]);
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom($response, HttpCodes::CREATED));
         }
@@ -72,9 +72,9 @@ class ClientTest extends AccountBase
 
         if ($this->isDevelopmentEnvironment()) {
             $response = $this->getExpectedValidationBody(
-                array(
-                    'email' => array('validation.required')
-                )
+                [
+                    'email' => ['validation.required']
+                ]
             );
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::BAD_REQUEST));

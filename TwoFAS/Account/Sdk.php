@@ -22,17 +22,12 @@ use TwoFAS\Account\Response\Response;
  *
  * @package TwoFAS\Account
  */
-class TwoFAS
+class Sdk
 {
     /**
      * @var string
      */
-    const VERSION = '3.0.0';
-
-    /**
-     * @var string
-     */
-    const API_VERSION = 'v2';
+    const VERSION = '4.0.0';
 
     /**
      * @var TokenStorage
@@ -62,17 +57,17 @@ class TwoFAS
     /**
      * @var array
      */
-    private $headers = array(
+    private $headers = [
         'Content-Type' => 'application/json',
         'Sdk-Version'  => self::VERSION
-    );
+    ];
 
     /**
      * @param TokenStorage $tokenStorage
      * @param TokenType    $specificIntegration
      * @param array        $headers
      */
-    public function __construct(TokenStorage $tokenStorage, TokenType $specificIntegration, array $headers = array())
+    public function __construct(TokenStorage $tokenStorage, TokenType $specificIntegration, array $headers = [])
     {
         $this->tokenStorage                 = $tokenStorage;
         $this->specificIntegrationTokenType = $specificIntegration;
@@ -87,7 +82,7 @@ class TwoFAS
      *
      * @param string $url
      *
-     * @return TwoFAS
+     * @return Sdk
      */
     public function setBaseUrl($url)
     {
@@ -100,7 +95,7 @@ class TwoFAS
      *
      * @param ClientInterface $httpClient
      *
-     * @return TwoFAS
+     * @return Sdk
      */
     public function setHttpClient(ClientInterface $httpClient)
     {
@@ -120,7 +115,7 @@ class TwoFAS
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'GET',
-            $this->createEndpoint('/me')
+            $this->createEndpoint('v2/me')
         );
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
@@ -148,12 +143,12 @@ class TwoFAS
         $response = $this->call(
             null,
             'POST',
-            $this->createEndpoint('/me'), array(
+            $this->createEndpoint('v2/me'), [
                 'email'                 => $email,
                 'password'              => $password,
                 'password_confirmation' => $passwordConfirmation,
                 'source'                => $source
-            )
+            ]
         );
 
         if ($response->matchesHttpCode(HttpCodes::CREATED)) {
@@ -178,7 +173,7 @@ class TwoFAS
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'GET',
-            $this->createEndpoint('/integrations/' . $integrationId)
+            $this->createEndpoint('v2/integrations/' . $integrationId)
         );
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
@@ -203,9 +198,9 @@ class TwoFAS
         $response = $this->call(
             TokenType::setup(),
             'POST',
-            $this->createEndpoint('/integrations'), array(
+            $this->createEndpoint('v3/integrations'), [
                 'name' => $name
-            )
+            ]
         );
 
         if ($response->matchesHttpCode(HttpCodes::CREATED)) {
@@ -230,7 +225,7 @@ class TwoFAS
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'PUT',
-            $this->createEndpoint('/integrations/' . $integration->getId()),
+            $this->createEndpoint('v2/integrations/' . $integration->getId()),
             $integration->toArray()
         );
 
@@ -256,12 +251,66 @@ class TwoFAS
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'PUT',
-            $this->createEndpoint('/integrations/' . $integration->getId() . '/reset-encryption-keys'),
+            $this->createEndpoint('v2/integrations/' . $integration->getId() . '/reset-encryption-keys'),
             $integration->toArray()
         );
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
             return $this->hydrator->getIntegrationFromResponseData($response->getData());
+        }
+
+        throw $response->getError();
+    }
+
+    /**
+     * Used for checking if integration can be upgraded
+     *
+     * @param int $integrationId
+     *
+     * @return bool
+     *
+     * @throws Exception
+     * @throws NotFoundException
+     */
+    public function canIntegrationUpgrade($integrationId)
+    {
+        $response = $this->call(
+            $this->specificIntegrationTokenType,
+            'GET',
+            $this->createEndpoint('v2/integrations/' . $integrationId . '/upgrade')
+        );
+
+        if ($response->matchesHttpCode(HttpCodes::NO_CONTENT)) {
+            return true;
+        }
+
+        if ($response->matchesHttpCode(HttpCodes::BAD_REQUEST)) {
+            return false;
+        }
+
+        throw $response->getError();
+    }
+
+    /**
+     * Used for upgrading integration
+     *
+     * @param int $integrationId
+     *
+     * @return bool
+     *
+     * @throws Exception
+     * @throws NotFoundException
+     */
+    public function upgradeIntegration($integrationId)
+    {
+        $response = $this->call(
+            $this->specificIntegrationTokenType,
+            'PUT',
+            $this->createEndpoint('v2/integrations/' . $integrationId . '/upgrade')
+        );
+
+        if ($response->matchesHttpCode(HttpCodes::NO_CONTENT)) {
+            return true;
         }
 
         throw $response->getError();
@@ -283,7 +332,7 @@ class TwoFAS
         $response = $this->call(
             TokenType::fromString($token->getType()),
             'PUT',
-            $this->createEndpoint('/me/tokens/refresh')
+            $this->createEndpoint('v2/me/tokens/refresh')
         );
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
@@ -312,41 +361,11 @@ class TwoFAS
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'DELETE',
-            $this->createEndpoint('/integrations/' . $integration->getId())
+            $this->createEndpoint('v2/integrations/' . $integration->getId())
         );
 
         if ($response->matchesHttpCode(HttpCodes::NO_CONTENT)) {
             return new NoContent();
-        }
-
-        throw $response->getError();
-    }
-
-    /**
-     * Used for creating new integration key in 2FAS.
-     *
-     * @param int    $integrationId
-     * @param string $name
-     *
-     * @return Key
-     *
-     * @throws Exception
-     * @throws ValidationException
-     */
-    public function createKey($integrationId, $name)
-    {
-        $response = $this->call(
-            $this->specificIntegrationTokenType,
-            'POST',
-            $this->createEndpoint("/integrations/{$integrationId}/keys"), array(
-                'name' => $name,
-                'type' => 'production'
-            )
-        );
-
-        if ($response->matchesHttpCode(HttpCodes::CREATED)) {
-            $responseData = $response->getData();
-            return new Key($responseData['token']);
         }
 
         throw $response->getError();
@@ -371,7 +390,7 @@ class TwoFAS
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'GET',
-            $this->createEndpoint("/billing/cards/{$client->getPrimaryCardId()}")
+            $this->createEndpoint("v2/billing/cards/{$client->getPrimaryCardId()}")
         );
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
@@ -396,7 +415,7 @@ class TwoFAS
         $response = $this->call(
             null,
             'POST',
-            $this->createEndpoint('/me/password-reset'), array('email' => $email)
+            $this->createEndpoint('v2/me/password-reset'), ['email' => $email]
         );
 
         if ($response->matchesHttpCode(HttpCodes::NO_CONTENT)) {
@@ -421,12 +440,12 @@ class TwoFAS
     {
         $response = $this->httpClient->request(
             'POST',
-            $this->createEndpoint('/me/login'),
-            array(
+            $this->createEndpoint('v2/me/login'),
+            [
                 'email'    => $email,
                 'password' => $password,
                 'scope'    => TokenType::SETUP
-            ),
+            ],
             $this->headers
         );
 
@@ -435,7 +454,7 @@ class TwoFAS
             $accessToken  = $responseData['token']['accessToken'];
             $scopes       = $responseData['token']['token']['scopes'];
 
-            if (array(TokenType::SETUP) === $scopes) {
+            if ([TokenType::SETUP] === $scopes) {
                 $token = new Token(TokenType::SETUP, $accessToken, 0);
                 $this->tokenStorage->storeToken($token);
 
@@ -461,13 +480,13 @@ class TwoFAS
     {
         $response = $this->httpClient->request(
             'POST',
-            $this->createEndpoint('/me/login/integration'),
-            array(
+            $this->createEndpoint('v2/me/login/integration'),
+            [
                 'email'          => $email,
                 'password'       => $password,
                 'scope'          => $this->specificIntegrationTokenType->getType(),
                 'integration_id' => $integrationId
-            ),
+            ],
             $this->headers
         );
 
@@ -476,7 +495,7 @@ class TwoFAS
             $accessToken  = $responseData['token']['accessToken'];
             $scopes       = $responseData['token']['token']['scopes'];
 
-            if (array($this->specificIntegrationTokenType->getType()) === $scopes) {
+            if ([$this->specificIntegrationTokenType->getType()] === $scopes) {
                 $token = new Token($this->specificIntegrationTokenType->getType(), $accessToken, $integrationId);
                 $this->tokenStorage->storeToken($token);
 
@@ -550,7 +569,7 @@ class TwoFAS
      */
     private function createEndpoint($suffix)
     {
-        return $this->baseUrl . '/' . self::API_VERSION . $suffix;
+        return $this->baseUrl . '/' . $suffix;
     }
 
     /**
@@ -564,7 +583,7 @@ class TwoFAS
      * @throws Exception
      * @throws TokenNotFoundException
      */
-    private function call($tokenType, $method, $endpoint, array $data = array())
+    private function call($tokenType, $method, $endpoint, array $data = [])
     {
         if (null === $tokenType) {
             $this->clearAuthorizationToken();

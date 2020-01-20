@@ -99,12 +99,12 @@ class TokenType
      */
     public static function isValid($type)
     {
-        return in_array($type, array(
+        return in_array($type, [
             self::SETUP,
             self::WORDPRESS,
             self::SYMFONY,
             self::API,
             self::PASSWORDLESS_WORDPRESS
-        ), true);
+        ], true);
     }
 }

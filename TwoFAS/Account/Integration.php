@@ -17,11 +17,6 @@ final class Integration
     /**
      * @var string
      */
-    private $login;
-
-    /**
-     * @var string
-     */
     private $name;
 
     /**
@@ -39,11 +34,10 @@ final class Integration
      */
     public function toArray()
     {
-        return array(
-            'id'    => $this->getId(),
-            'login' => $this->getLogin(),
-            'name'  => $this->getName()
-        );
+        return [
+            'id'   => $this->getId(),
+            'name' => $this->getName()
+        ];
     }
 
     /**
@@ -62,25 +56,6 @@ final class Integration
     public function setId($id)
     {
         $this->id = (int) $id;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLogin()
-    {
-        return $this->login;
-    }
-
-    /**
-     * @param string $login
-     *
-     * @return Integration
-     */
-    public function setLogin($login)
-    {
-        $this->login = (string) $login;
         return $this;
     }
 

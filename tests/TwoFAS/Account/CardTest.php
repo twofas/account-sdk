@@ -47,13 +47,13 @@ class CardTest extends AccountBase
         $twoFAs->setHttpClient($httpClient);
 
         if ($this->isDevelopmentEnvironment()) {
-            $response = json_encode(array(
+            $response = json_encode([
                 'id'                     => getenv('second_client_id'),
                 'email'                  => getenv('second_client_email'),
                 'has_card'               => false,
                 'has_generated_password' => true,
                 'primary_card_id'        => null
-            ));
+            ]);
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom($response, HttpCodes::OK));
         }
@@ -70,20 +70,20 @@ class CardTest extends AccountBase
         $cardId = getenv('card_id');
 
         if ($this->isDevelopmentEnvironment()) {
-            $responseClient = json_encode(array(
+            $responseClient = json_encode([
                 'id'                     => getenv('client_id'),
                 'email'                  => getenv('client_email'),
                 'has_card'               => true,
                 'has_generated_password' => true,
                 'primary_card_id'        => $cardId
-            ));
+            ]);
 
-            $responseCard = json_encode(array(
+            $responseCard = json_encode([
                 'id'       => $cardId,
                 'last4'    => '4343',
                 'expMonth' => 11,
                 'expYear'  => 2029
-            ));
+            ]);
 
             $httpClient->expects($this->at(0))->method('request')->willReturn(ResponseGenerator::createFrom($responseClient, HttpCodes::OK));
             $httpClient->expects($this->at(1))->method('request')->willReturn(ResponseGenerator::createFrom($responseCard, HttpCodes::OK));

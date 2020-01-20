@@ -16,7 +16,7 @@ class ValidationException extends Exception implements ValidationExceptionInterf
     /**
      * @var array
      */
-    private $errors = array();
+    private $errors = [];
 
     /**
      * @param array          $errors
