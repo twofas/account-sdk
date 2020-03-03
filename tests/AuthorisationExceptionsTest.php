@@ -1,9 +1,9 @@
 <?php
 
-use TwoFAS\Account\Errors;
+namespace TwoFAS\Account;
+
 use TwoFAS\Account\Exception\Exception as AccountException;
 use TwoFAS\Account\Exception\ValidationException;
-use TwoFAS\Account\HttpCodes;
 use TwoFAS\Account\Response\ResponseGenerator;
 
 class AuthorisationExceptionsTest extends AccountBase

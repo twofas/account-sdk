@@ -7,7 +7,6 @@ use TwoFAS\Account\Exception\AuthorizationException;
 use TwoFAS\Account\Exception\Exception;
 use TwoFAS\Account\Exception\NotFoundException;
 use TwoFAS\Account\Exception\PasswordResetAttemptsRemainingIsReachedException;
-use TwoFAS\Account\Exception\TokenRefreshException;
 use TwoFAS\Account\Exception\ValidationException;
 use TwoFAS\Account\HttpClient\ClientInterface;
 use TwoFAS\Account\HttpClient\CurlClient;
@@ -27,7 +26,7 @@ class Sdk
     /**
      * @var string
      */
-    const VERSION = '4.0.0';
+    const VERSION = '4.1.0';
 
     /**
      * @var TokenStorage
@@ -311,38 +310,6 @@ class Sdk
 
         if ($response->matchesHttpCode(HttpCodes::NO_CONTENT)) {
             return true;
-        }
-
-        throw $response->getError();
-    }
-
-    /**
-     * Used for refreshing authorisation tokens
-     *
-     * @param Token $token
-     *
-     * @return void
-     *
-     * @throws Exception
-     * @throws TokenNotFoundException
-     * @throws TokenRefreshException
-     */
-    public function refreshToken(Token $token)
-    {
-        $response = $this->call(
-            TokenType::fromString($token->getType()),
-            'PUT',
-            $this->createEndpoint('v2/me/tokens/refresh')
-        );
-
-        if ($response->matchesHttpCode(HttpCodes::OK)) {
-            $responseData = $response->getData();
-            $accessToken  = $responseData['token']['accessToken'];
-
-            $refreshedToken = new Token($token->getType(), $accessToken, $token->getIntegrationId());
-            $this->tokenStorage->storeToken($refreshedToken);
-
-            return;
         }
 
         throw $response->getError();

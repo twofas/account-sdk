@@ -1,8 +1,9 @@
 <?php
 
-use TwoFAS\Account\HttpCodes;
+namespace TwoFAS\Account;
+
 use TwoFAS\Account\Response\ResponseGenerator;
-use TwoFAS\Account\Sdk;
+use TwoFAS\Account\Storage\ArrayStorage;
 
 class CreatingKeysTest extends AccountBase
 {

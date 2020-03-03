@@ -1,7 +1,8 @@
 <?php
 
+namespace TwoFAS\Account;
+
 use TwoFAS\Account\Exception\Exception as AccountException;
-use TwoFAS\Account\HttpCodes;
 use TwoFAS\Account\Response\ResponseGenerator;
 
 class PublicConfigTest extends AccountBase

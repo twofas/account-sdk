@@ -1,5 +1,8 @@
 <?php
 
+namespace TwoFAS\Account\Storage;
+
+use LogicException;
 use TwoFAS\Account\OAuth\Interfaces\TokenStorage;
 use TwoFAS\Account\OAuth\Token;
 use TwoFAS\Account\OAuth\TokenNotFoundException;

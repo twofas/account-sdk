@@ -35,16 +35,12 @@
     },
     "autoload": {
         "psr-4": {
-            "TwoFAS\\Account\\": "TwoFAS/Account/"
+            "TwoFAS\\Account\\": "src/"
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TwoFAS/Storage/ArrayStorage.php",
-            "tests/TwoFAS/Storage/FilledStorage.php",
-            "tests/TwoFAS/Storage/RandomStorage.php",
-            "tests/TwoFAS/Storage/RevokedStorage.php",
-            "tests/TwoFAS/Account/AccountBase.php"
-        ]
+        "psr-4": {
+            "TwoFAS\\Account\\": "tests/"
+        }
     }
 }

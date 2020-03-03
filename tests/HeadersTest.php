@@ -1,7 +1,10 @@
 <?php
 
+namespace TwoFAS\Account;
+
+use ReflectionClass;
 use TwoFAS\Account\OAuth\TokenType;
-use TwoFAS\Account\Sdk;
+use TwoFAS\Account\Storage\ArrayStorage;
 
 class HeadersTest extends AccountBase
 {

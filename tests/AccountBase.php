@@ -1,10 +1,16 @@
 <?php
 
-use TwoFAS\Account\Errors;
+namespace TwoFAS\Account;
+
+use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit_Framework_TestCase;
 use TwoFAS\Account\HttpClient\CurlClient;
 use TwoFAS\Account\OAuth\Interfaces\TokenStorage;
 use TwoFAS\Account\OAuth\TokenType;
-use TwoFAS\Account\Sdk;
+use TwoFAS\Account\Storage\ArrayStorage;
+use TwoFAS\Account\Storage\FilledStorage;
+use TwoFAS\Account\Storage\RandomStorage;
+use TwoFAS\Account\Storage\RevokedStorage;
 
 abstract class AccountBase extends PHPUnit_Framework_TestCase
 {

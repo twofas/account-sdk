@@ -1,10 +1,11 @@
 <?php
 
-use TwoFAS\Account\Card;
-use TwoFAS\Account\HttpCodes;
+namespace TwoFAS\Account;
+
 use TwoFAS\Account\OAuth\Token;
 use TwoFAS\Account\OAuth\TokenType;
 use TwoFAS\Account\Response\ResponseGenerator;
+use TwoFAS\Account\Storage\ArrayStorage;
 
 class CardTest extends AccountBase
 {

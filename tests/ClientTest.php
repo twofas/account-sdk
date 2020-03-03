@@ -1,6 +1,7 @@
 <?php
 
-use TwoFAS\Account\HttpCodes;
+namespace TwoFAS\Account;
+
 use TwoFAS\Account\Response\ResponseGenerator;
 
 class ClientTest extends AccountBase

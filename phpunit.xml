@@ -34,6 +34,5 @@
         <env name="oauth_second_wordpress_token" value="oauth_second_wordpress_token"/>
         <env name="oauth_setup_token" value="oauth_setup_token"/>
         <env name="oauth_setup_revoked_token" value="oauth_setup_revoked_token"/>
-        <env name="oauth_expiring_wordpress_token" value="oauth_expiring_wordpress_token"/>
     </php>
 </phpunit>

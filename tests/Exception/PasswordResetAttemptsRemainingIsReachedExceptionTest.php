@@ -1,6 +1,8 @@
 <?php
 
-use TwoFAS\Account\Exception\PasswordResetAttemptsRemainingIsReachedException;
+namespace TwoFAS\Account\Exception;
+
+use TwoFAS\Account\AccountBase;
 use TwoFAS\Account\HttpClient\CurlClient;
 use TwoFAS\Account\HttpCodes;
 use TwoFAS\Account\Response\ResponseGenerator;

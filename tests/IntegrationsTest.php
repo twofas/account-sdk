@@ -1,7 +1,7 @@
 <?php
 
-use TwoFAS\Account\HttpCodes;
-use TwoFAS\Account\Integration;
+namespace TwoFAS\Account;
+
 use TwoFAS\Account\Response\ResponseGenerator;
 
 class IntegrationsTest extends AccountBase

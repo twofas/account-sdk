@@ -1,6 +1,8 @@
 <?php
 
-use TwoFAS\Account\Integration;
+namespace TwoFAS\Account;
+
+use PHPUnit_Framework_TestCase;
 
 class IntegrationTest extends PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,13 @@
 <?php
 
+namespace TwoFAS\Account\Storage;
+
+use LogicException;
 use TwoFAS\Account\OAuth\Interfaces\TokenStorage;
 use TwoFAS\Account\OAuth\Token;
 use TwoFAS\Account\OAuth\TokenNotFoundException;
 
-class RevokedStorage implements TokenStorage
+class FilledStorage implements TokenStorage
 {
     /**
      * @inheritdoc
@@ -19,8 +22,12 @@ class RevokedStorage implements TokenStorage
      */
     public function retrieveToken($type)
     {
+        if ($type === 'wordpress') {
+            return new Token('wordpress', getenv('oauth_wordpress_token'), getenv('integration_id'));
+        }
+
         if ($type === 'setup') {
-            return new Token('setup', getenv('oauth_setup_revoked_token'), 0);
+            return new Token('setup', getenv('oauth_setup_token'), 0);
         }
 
         throw new TokenNotFoundException;
