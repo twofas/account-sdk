@@ -26,7 +26,7 @@ class Sdk
     /**
      * @var string
      */
-    const VERSION = '4.1.0';
+    const VERSION = '4.2.0';
 
     /**
      * @var TokenStorage
@@ -172,7 +172,7 @@ class Sdk
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'GET',
-            $this->createEndpoint('v2/integrations/' . $integrationId)
+            $this->createEndpoint('v3/integrations/' . $integrationId)
         );
 
         if ($response->matchesHttpCode(HttpCodes::OK)) {
@@ -224,7 +224,7 @@ class Sdk
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'PUT',
-            $this->createEndpoint('v2/integrations/' . $integration->getId()),
+            $this->createEndpoint('v3/integrations/' . $integration->getId()),
             $integration->toArray()
         );
 
@@ -328,7 +328,7 @@ class Sdk
         $response = $this->call(
             $this->specificIntegrationTokenType,
             'DELETE',
-            $this->createEndpoint('v2/integrations/' . $integration->getId())
+            $this->createEndpoint('v3/integrations/' . $integration->getId())
         );
 
         if ($response->matchesHttpCode(HttpCodes::NO_CONTENT)) {

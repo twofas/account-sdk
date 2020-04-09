@@ -51,15 +51,10 @@ class IntegrationsTest extends AccountBase
 
         if ($this->isDevelopmentEnvironment()) {
             $response = json_encode([
-                'id'            => getenv('integration_id'),
-                'login'         => 'sdk-website',
-                'name'          => 'name',
-                'channel_sms'   => false,
-                'channel_call'  => false,
-                'channel_email' => false,
-                'channel_totp'  => true,
-                'public_key'    => $publicKey,
-                'private_key'   => $privateKey
+                'id'          => getenv('integration_id'),
+                'name'        => 'name',
+                'public_key'  => $publicKey,
+                'private_key' => $privateKey
             ]);
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom($response, HttpCodes::OK));
@@ -81,13 +76,8 @@ class IntegrationsTest extends AccountBase
 
         if ($this->isDevelopmentEnvironment()) {
             $response = [
-                'id'            => 1,
-                'login'         => 'login',
-                'name'          => 'new_name',
-                'channel_sms'   => false,
-                'channel_call'  => false,
-                'channel_email' => true,
-                'channel_totp'  => true
+                'id'   => 1,
+                'name' => 'new_name',
             ];
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::OK));
@@ -113,15 +103,10 @@ class IntegrationsTest extends AccountBase
 
         if ($this->isDevelopmentEnvironment()) {
             $response = [
-                'id'            => 1,
-                'login'         => 'login',
-                'name'          => 'new_name',
-                'channel_sms'   => false,
-                'channel_call'  => false,
-                'channel_email' => false,
-                'channel_totp'  => true,
-                'private_key'   => str_repeat('a', 700),
-                'public_key'    => str_repeat('b', 300)
+                'id'          => 1,
+                'name'        => 'new_name',
+                'private_key' => str_repeat('a', 700),
+                'public_key'  => str_repeat('b', 300)
             ];
 
             $httpClient->method('request')->willReturn(ResponseGenerator::createFrom(json_encode($response), HttpCodes::OK));
